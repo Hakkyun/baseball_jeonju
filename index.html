@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>학균 경기일지</title>
+<style>
+:root {
+  --bg: #0f0f0f;
+  --bg2: #1a1a1a;
+  --bg3: #242424;
+  --border: #2e2e2e;
+  --text: #f0f0f0;
+  --text2: #aaa;
+  --text3: #555;
+  --mint: #3DD6A3;
+  --pink: #FF4F7B;
+  --yellow: #FFD600;
+  --white: #ffffff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; background: var(--bg); color: var(--text); padding: 24px; }
+.wrap { max-width: 800px; margin: 0 auto; }
+
+.header { margin-bottom: 28px; }
+.header-top { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+h1 { font-size: 18px; font-weight: 500; color: var(--white); }
+.logo-dot { display: flex; gap: 4px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; }
+.dot-mint { background: var(--mint); }
+.dot-pink { background: var(--pink); }
+.dot-yellow { background: var(--yellow); }
+.subtitle { font-size: 12px; color: var(--text3); }
+.section-title { font-size: 11px; font-weight: 500; color: var(--text3); letter-spacing: 0.1em; margin-bottom: 12px; text-transform: uppercase; }
+
+.season-box { background: var(--bg2); border: 0.5px solid var(--border); border-radius: 14px; padding: 18px 20px; margin-bottom: 28px; }
+.season-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.season-label { font-size: 11px; font-weight: 500; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; }
+.season-games { font-size: 12px; color: var(--text3); }
+.season-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+.season-item { text-align: center; background: var(--bg3); border-radius: 10px; padding: 12px 6px; }
+.season-val { font-size: 20px; font-weight: 500; color: var(--text); }
+.season-val.good { color: var(--mint); }
+.season-val.bad { color: var(--pink); }
+.season-val.neutral { color: var(--yellow); }
+.season-lbl { font-size: 10px; color: var(--text3); margin-top: 3px; }
+
+.game-card { border: 0.5px solid var(--border); border-radius: 12px; margin-bottom: 10px; overflow: hidden; background: var(--bg2); }
+.game-header { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; cursor: pointer; user-select: none; }
+.game-header:hover { background: var(--bg3); }
+.game-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.game-date { font-size: 13px; font-weight: 500; color: var(--text); }
+.game-opponent { font-size: 12px; color: var(--text2); }
+.badge { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 9px; border-radius: 20px; }
+.badge-win { background: rgba(61,214,163,0.15); color: var(--mint); border: 0.5px solid rgba(61,214,163,0.3); }
+.badge-lose { background: rgba(255,79,123,0.15); color: var(--pink); border: 0.5px solid rgba(255,79,123,0.3); }
+.badge-draw { background: rgba(255,214,0,0.15); color: var(--yellow); border: 0.5px solid rgba(255,214,0,0.3); }
+.badge-nd { background: rgba(170,170,170,0.15); color: var(--text2); border: 0.5px solid rgba(170,170,170,0.2); }
+.chevron { font-size: 10px; color: var(--text3); transition: transform 0.2s; }
+.chevron.open { transform: rotate(180deg); }
+.game-body { padding: 14px 16px 16px; display: none; border-top: 0.5px solid var(--border); }
+.game-body.open { display: block; }
+
+.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 12px; }
+.stat-item { background: var(--bg3); border-radius: 8px; padding: 10px 6px; text-align: center; }
+.stat-label { font-size: 10px; color: var(--text3); margin-bottom: 4px; }
+.stat-value { font-size: 15px; font-weight: 500; color: var(--text); }
+.stat-value.highlight { color: var(--mint); }
+.stat-value.bad { color: var(--pink); }
+.stat-value.neutral { color: var(--yellow); }
+.stat-value.small { font-size: 12px; }
+
+.feedback-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+.feedback-card { border: 0.5px solid var(--border); border-radius: 10px; padding: 12px 13px; background: var(--bg3); }
+.feedback-title { font-size: 10px; font-weight: 500; color: var(--text3); margin-bottom: 8px; letter-spacing: 0.05em; text-transform: uppercase; }
+.feedback-text { font-size: 12px; color: var(--text2); line-height: 1.8; }
+
+/* 지난 피드백 확인 */
+.review-card { border: 0.5px solid var(--border); border-radius: 10px; padding: 12px 13px; background: var(--bg3); margin-bottom: 8px; }
+.review-item { margin-bottom: 12px; }
+.review-item:last-child { margin-bottom: 0; }
+.review-topic { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 5px; }
+.review-eval { display: flex; align-items: flex-start; gap: 7px; font-size: 12px; color: var(--text2); line-height: 1.7; }
+.status-icon { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 50%; font-size: 9px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+.status-O { background: rgba(61,214,163,0.2); color: var(--mint); border: 1px solid rgba(61,214,163,0.5); }
+.status-T { background: rgba(255,214,0,0.2); color: var(--yellow); border: 1px solid rgba(255,214,0,0.5); }
+.status-X { background: rgba(255,79,123,0.2); color: var(--pink); border: 1px solid rgba(255,79,123,0.5); }
+
+/* 다음 경기 목표 */
+.next-card { border: 0.5px solid rgba(61,214,163,0.4); border-radius: 10px; padding: 12px 13px; background: rgba(61,214,163,0.05); margin-top: 8px; }
+.next-title { font-size: 10px; font-weight: 500; color: var(--mint); margin-bottom: 8px; letter-spacing: 0.05em; text-transform: uppercase; }
+.next-item { display: flex; gap: 8px; font-size: 12px; color: var(--text2); line-height: 1.8; margin-bottom: 2px; }
+.next-num { color: var(--mint); font-weight: 600; min-width: 16px; }
+
+.schedule-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+.sched-item { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 8px; border: 0.5px solid var(--border); background: var(--bg2); }
+.sched-item.done { border-color: rgba(61,214,163,0.4); background: rgba(61,214,163,0.05); opacity: 0.7; }
+.sched-item.today { border-color: var(--mint); background: rgba(61,214,163,0.07); }
+.sched-item.absent { border-color: rgba(255,79,123,0.4); background: rgba(255,79,123,0.04); opacity: 0.7; }
+.sched-info { display: flex; flex-direction: column; gap: 3px; }
+.sched-match { font-size: 11px; color: var(--text2); }
+.sched-sub { font-size: 10px; color: var(--text3); }
+.sched-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); flex-shrink: 0; align-self: flex-start; margin-top: 3px; }
+.sched-dot.done { background: var(--mint); }
+.sched-dot.today { background: var(--mint); }
+.sched-dot.absent { background: var(--pink); }
+
+.divider { width: 100%; height: 0.5px; background: var(--border); margin: 24px 0; }
+.accent-bar { height: 2px; background: linear-gradient(90deg, var(--mint), var(--pink), var(--yellow)); border-radius: 2px; margin-bottom: 28px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div class="header-top">
+      <h1>학균 경기일지</h1>
+      <div class="logo-dot">
+        <div class="dot dot-mint"></div>
+        <div class="dot dot-pink"></div>
+        <div class="dot dot-yellow"></div>
+      </div>
+    </div>
+    <p class="subtitle">변학균 (41) · 전주 라이징스타 · 2026 시즌</p>
+  </div>
+
+  <div class="accent-bar"></div>
+
+  <div class="section-title">2026 시즌 누적</div>
+  <div class="season-box">
+    <div class="season-top">
+      <span class="season-label">Pitching Stats</span>
+      <span class="season-games" id="season-games-label"></span>
+    </div>
+    <div class="season-grid" id="season-stats"></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-title">경기 기록</div>
+  <div id="game-list"></div>
+
+  <div class="divider"></div>
+
+  <div class="section-title">2026 시즌 일정</div>
+  <div class="schedule-grid" id="schedule"></div>
+</div>
+
+<script>
+const GAMES = [
+  {
+    id: 1,
+    date: '2026-03-22',
+    opponent: '불독스',
+    score: '8-8',
+    teamResult: 'draw',
+    decision: 'ND',
+    inn: '1.1',
+    outs: 4,
+    pitch: 30,
+    batters: 7,
+    hit: 3, bb: 0, so: 2, er: 3,
+    feedback: '볼넷 0개 목표 달성. 직구 구위 팀/상대팀 모두 인정. 릴리즈 포인트 확신 오기 시작. 직구가 대부분 낮게 제구됨(낮은 몸쪽/바깥쪽). 같은 코스 반복으로 타자들 적응, 밀어쳐서 2루수/유격수 쪽 안타. 하이 패스트볼 필요. 체인지업 필요성(타자들이 앞에서 짧게 치는 패턴).',
+    good: '볼넷 0개\n직구 구위 확인\n릴리즈 포인트 확신 시작',
+    review: [
+      {
+        topic: '릴리즈 포인트 불안정 — 직구 위주로 제구 집중',
+        status: 'T',
+        eval: '볼넷 0개 달성, 릴리즈 포인트 확신 오기 시작. 다만 사이드~언더 높이가 아직 완전히 고정되진 않음. 계속 쌓아가는 중.'
+      }
+    ],
+    next: [
+      '하이 패스트볼 추가 — 낮은 코스와 섞어 타자 시선 흔들기',
+      '서클체인지업 사이드암 버전 테스트 (목요일 캐치볼)',
+      '릴리즈 포인트 일정하게 — 매 구 같은 팔 높이 유지',
+    ]
+  }
+];
+
+// status: 'upcoming'=예정, 'done'=참석, 'absent'=불참
+const SCHEDULE = [
+  { date: '2026-03-22', time: '09:00', venue: '진안구장', home: '불독스', away: '라이징스타', status: 'done' },
+  { date: '2026-03-29', time: '11:00', venue: '필연구장', home: '라이징스타', away: '스나이퍼스', status: 'upcoming' },
+  { date: '2026-04-05', time: '10:00', venue: '솔내구장', home: '라이징스타', away: '지니어스', status: 'upcoming' },
+  { date: '2026-04-12', time: '12:00', venue: '필연구장', home: '라이징스타', away: '임팩트', status: 'upcoming' },
+  { date: '2026-04-19', time: '16:00', venue: '효자구장', home: '연금이', away: '라이징스타', status: 'upcoming' },
+  { date: '2026-04-26', time: '12:00', venue: '솔내구장', home: '승승장구 락', away: '라이징스타', status: 'upcoming' },
+  { date: '2026-05-03', time: '09:00', venue: '진안구장', home: '미소렌터카', away: '라이징스타', status: 'upcoming' },
+  { date: '2026-05-10', time: '08:00', venue: '효자구장', home: '라이징스타', away: '불독스', status: 'upcoming' },
+  { date: '2026-05-17', time: '08:00', venue: '필연구장', home: '스나이퍼', away: '라이징스타', status: 'upcoming' },
+  { date: '2026-05-24', time: '10:00', venue: '솔내구장', home: '지니어스', away: '라이징스타', status: 'upcoming' },
+  { date: '2026-05-31', time: '12:00', venue: '필연구장', home: '임팩트', away: '라이징스타', status: 'upcoming' },
+  { date: '2026-06-07', time: '16:00', venue: '효자구장', home: '라이징스타', away: '연금이', status: 'upcoming' },
+  { date: '2026-06-14', time: '14:00', venue: '솔내구장', home: '라이징스타', away: '승승장구 락', status: 'upcoming' },
+  { date: '2026-06-21', time: '14:00', venue: '솔내구장', home: '라이징스타', away: '미소렌터카', status: 'upcoming' },
+  { date: '2026-06-28', time: '08:00', venue: '솔내구장', home: '불독스', away: '라이징스타', status: 'upcoming' },
+  { date: '2026-07-05', time: '10:00', venue: '효자구장', home: '라이징스타', away: '스나이퍼스', status: 'upcoming' },
+  { date: '2026-07-12', time: '08:00', venue: '필연구장', home: '라이징스타', away: '지니어스', status: 'upcoming' },
+  { date: '2026-07-19', time: '14:00', venue: '솔내구장', home: '라이징스타', away: '임팩트', status: 'upcoming' },
+  { date: '2026-07-26', time: '16:00', venue: '효자구장', home: '연금이', away: '라이징스타', status: 'upcoming' },
+  { date: '2026-08-23', time: '08:00', venue: '효자구장', home: '승승장구 락', away: '라이징스타', status: 'upcoming' },
+  { date: '2026-09-06', time: '14:00', venue: '솔내구장', home: '미소렌터카', away: '라이징스타', status: 'upcoming' },
+];
+
+const TODAY = '2026-03-22';
+
+function statusIcon(s) {
+  const map = { O: ['O', 'O'], T: ['△', 'T'], X: ['✕', 'X'] };
+  const [char, cls] = map[s] || ['?', 'X'];
+  return `<span class="status-icon status-${s}">${char}</span>`;
+}
+
+function decisionBadge(d) {
+  if (d === 'W') return '<span class="badge badge-win">승</span>';
+  if (d === 'L') return '<span class="badge badge-lose">패</span>';
+  if (d === 'S') return '<span class="badge badge-win">세이브</span>';
+  return '<span class="badge badge-nd">노디시전</span>';
+}
+
+function decisionLabel(d) {
+  if (d === 'W') return { text: '승', cls: 'highlight' };
+  if (d === 'L') return { text: '패', cls: 'bad' };
+  if (d === 'S') return { text: '세이브', cls: 'highlight' };
+  return { text: '노디시전', cls: 'neutral small' };
+}
+
+function teamResultBadge(r) {
+  if (r === 'win') return '<span class="badge badge-win">승</span>';
+  if (r === 'lose') return '<span class="badge badge-lose">패</span>';
+  return '<span class="badge badge-draw">무</span>';
+}
+
+function renderSeasonStats() {
+  const totalOuts = GAMES.reduce((s, g) => s + (g.outs || 0), 0);
+  const totalER = GAMES.reduce((s, g) => s + (g.er || 0), 0);
+  const totalBB = GAMES.reduce((s, g) => s + (g.bb || 0), 0);
+  const totalSO = GAMES.reduce((s, g) => s + (g.so || 0), 0);
+  const totalHit = GAMES.reduce((s, g) => s + (g.hit || 0), 0);
+  const wins = GAMES.filter(g => g.decision === 'W').length;
+  const losses = GAMES.filter(g => g.decision === 'L').length;
+  const saves = GAMES.filter(g => g.decision === 'S').length;
+
+  const innVal = totalOuts / 3;
+  const era = innVal > 0 ? (totalER / innVal * 7).toFixed(2) : '-';
+  const innFmt = `${Math.floor(totalOuts / 3)}.${totalOuts % 3}`;
+
+  document.getElementById('season-games-label').textContent = `${GAMES.length}경기 등판`;
+  document.getElementById('season-stats').innerHTML = `
+    <div class="season-item">
+      <div class="season-val" style="font-size:16px;">${wins}-${losses}-${saves}</div>
+      <div class="season-lbl">승-패-세</div>
+    </div>
+    <div class="season-item">
+      <div class="season-val">${innFmt}</div>
+      <div class="season-lbl">이닝</div>
+    </div>
+    <div class="season-item">
+      <div class="season-val ${parseFloat(era) <= 3 ? 'good' : parseFloat(era) >= 6 ? 'bad' : 'neutral'}">${era}</div>
+      <div class="season-lbl">평균자책점</div>
+    </div>
+    <div class="season-item">
+      <div class="season-val">${totalSO}</div>
+      <div class="season-lbl">삼진</div>
+    </div>
+    <div class="season-item">
+      <div class="season-val ${totalBB === 0 ? 'good' : totalBB >= 5 ? 'bad' : ''}">${totalBB}</div>
+      <div class="season-lbl">볼넷</div>
+    </div>
+    <div class="season-item">
+      <div class="season-val">${totalHit}</div>
+      <div class="season-lbl">피안타</div>
+    </div>
+  `;
+}
+
+function formatDate(d) {
+  const dt = new Date(d + 'T00:00:00');
+  return `${dt.getFullYear()}.${String(dt.getMonth()+1).padStart(2,'0')}.${String(dt.getDate()).padStart(2,'0')}`;
+}
+
+function renderReview(review) {
+  if (!review || review.length === 0) return '';
+  const items = review.map(r => `
+    <div class="review-item">
+      <div class="review-topic">${r.topic}</div>
+      <div class="review-eval">${statusIcon(r.status)}<span>${r.eval}</span></div>
+    </div>
+  `).join('');
+  return `
+    <div class="review-card">
+      <div class="feedback-title">🔍 지난 피드백 확인</div>
+      ${items}
+    </div>
+  `;
+}
+
+function renderNext(next) {
+  if (!next || next.length === 0) return '';
+  const items = next.map((n, i) => `
+    <div class="next-item">
+      <span class="next-num">${i + 1}.</span>
+      <span>${n}</span>
+    </div>
+  `).join('');
+  return `
+    <div class="next-card">
+      <div class="next-title">▶ 다음 경기 목표</div>
+      ${items}
+    </div>
+  `;
+}
+
+function renderGames() {
+  const list = document.getElementById('game-list');
+  list.innerHTML = [...GAMES].reverse().map(g => {
+    const dl = decisionLabel(g.decision);
+    return `
+    <div class="game-card">
+      <div class="game-header" onclick="toggleCard(${g.id})">
+        <div class="game-meta">
+          <span class="game-date">${formatDate(g.date)}</span>
+          <span class="game-opponent">vs ${g.opponent} ${g.score}</span>
+          ${teamResultBadge(g.teamResult)}
+          ${decisionBadge(g.decision)}
+        </div>
+        <span class="chevron" id="chev-${g.id}">▼</span>
+      </div>
+      <div class="game-body" id="body-${g.id}">
+        <div class="stat-grid">
+          <div class="stat-item"><div class="stat-label">결과</div><div class="stat-value ${dl.cls}">${dl.text}</div></div>
+          <div class="stat-item"><div class="stat-label">이닝</div><div class="stat-value">${g.inn}</div></div>
+          <div class="stat-item"><div class="stat-label">투구수</div><div class="stat-value">${g.pitch ?? '-'}</div></div>
+          <div class="stat-item"><div class="stat-label">상대타자</div><div class="stat-value">${g.batters ?? '-'}</div></div>
+          <div class="stat-item"><div class="stat-label">피안타</div><div class="stat-value ${(g.hit||0) >= 3 ? 'bad' : ''}">${g.hit ?? '-'}</div></div>
+          <div class="stat-item"><div class="stat-label">4사구</div><div class="stat-value ${g.bb === 0 ? 'highlight' : (g.bb||0) >= 3 ? 'bad' : ''}">${g.bb ?? '-'}</div></div>
+          <div class="stat-item"><div class="stat-label">삼진</div><div class="stat-value ${(g.so||0) >= 2 ? 'highlight' : ''}">${g.so ?? '-'}</div></div>
+          <div class="stat-item"><div class="stat-label">자책</div><div class="stat-value ${g.er === 0 ? 'highlight' : (g.er||0) >= 3 ? 'bad' : ''}">${g.er ?? '-'}</div></div>
+        </div>
+        <div class="feedback-row">
+          <div class="feedback-card">
+            <div class="feedback-title">✓ 잘된 점</div>
+            <div class="feedback-text">${(g.good||'').split('\n').filter(Boolean).join('<br>') || '-'}</div>
+          </div>
+          <div class="feedback-card">
+            <div class="feedback-title">📝 피드백</div>
+            <div class="feedback-text">${g.feedback || '-'}</div>
+          </div>
+        </div>
+        ${renderReview(g.review)}
+        ${renderNext(g.next)}
+      </div>
+    </div>
+  `}).join('');
+}
+
+function toggleCard(id) {
+  document.getElementById(`body-${id}`).classList.toggle('open');
+  document.getElementById(`chev-${id}`).classList.toggle('open');
+}
+
+function renderSchedule() {
+  const el = document.getElementById('schedule');
+  el.innerHTML = SCHEDULE.map(s => {
+    const isToday = s.date === TODAY;
+    let cls = '';
+    let dotCls = '';
+    if (s.status === 'absent') { cls = 'absent'; dotCls = 'absent'; }
+    else if (s.status === 'done') { cls = 'done'; dotCls = 'done'; }
+    else if (isToday) { cls = 'today'; dotCls = 'today'; }
+    const d = new Date(s.date + 'T00:00:00');
+    const dateStr = `${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+    const isHome = s.home === '라이징스타';
+    const opponent = isHome ? s.away : s.home;
+    const homeAway = isHome ? '홈' : '어웨이';
+    return `<div class="sched-item ${cls}">
+      <div class="sched-dot ${dotCls}"></div>
+      <div class="sched-info">
+        <span class="sched-match">${dateStr} · vs ${opponent} (${homeAway})</span>
+        <span class="sched-sub">${s.time} · ${s.venue}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+renderSeasonStats();
+renderGames();
+renderSchedule();
+</script>
+</body>
+</html>
