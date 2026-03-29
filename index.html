@@ -173,20 +173,58 @@ const GAMES = [
       '서클체인지업 사이드암 버전 테스트 (목요일 캐치볼)',
       '릴리즈 포인트 일정하게 — 매 구 같은 팔 높이 유지',
     ]
+  },
+  {
+    id: 2,
+    date: '2026-03-29',
+    opponent: '스나이퍼스',
+    score: '11-4',
+    teamResult: 'win',
+    decision: 'ND',
+    inn: '1.0',
+    outs: 3,
+    pitch: 15,
+    batters: 4,
+    hit: 0, bb: 1, so: 2, er: 0,
+    feedback: '팔꿈치 통증(3루 송구 후유증) + 악력 저하 상태에서 등판. 구속 저번보다 떨어짐. 제구가 원하는 대로 안 됐고 스트라이크 던지는 것 자체를 목표로 조정. 어깨가 일찍 열리며 서클체인지업 릴리즈가 흐트러짐 — 사구도 이 영향. 너클커브가 사이드암에서 스위퍼처럼 꺾이며 예상 밖으로 잘 들어감. 직구+너클커브 조합으로 헛스윙 유도. 직구/너클커브/서클체인지업 3구종만 잡히면 충분히 경쟁력 있다는 확인.',
+    good: '무실점 (1이닝)\n삼진 2개\n너클커브 사이드암에서 스위퍼처럼 작동 확인\n하이 패스트볼 헛스윙 유도 성공',
+    review: [
+      {
+        topic: '하이 패스트볼 추가 — 낮은 코스와 섞어 타자 시선 흔들기',
+        status: 'O',
+        eval: '의도+비의도 혼합이었지만 하이 패스트볼 몇 개에서 헛스윙 유도 성공. 효과 확인.'
+      },
+      {
+        topic: '서클체인지업 사이드암 버전 테스트 (목요일 캐치볼)',
+        status: 'T',
+        eval: '금요일 캐치볼에서는 잘 됐으나 경기에서 어깨 열림으로 릴리즈 흐트러짐. 계속 개발 필요.'
+      },
+      {
+        topic: '릴리즈 포인트 일정하게 — 매 구 같은 팔 높이 유지',
+        status: 'X',
+        eval: '팔꿈치 통증+악력 저하로 릴리즈 포인트 불안정. 컨디션 영향이 컸음.'
+      }
+    ],
+    next: [
+      '몸 상태 우선 — 팔꿈치/무릎 회복 확인 후 등판, 캐치볼 강도 조절',
+      '너클커브 의도적으로 활용 — 직구와 조합, 스트라이크존 공략 집중',
+      '서클체인지업 릴리즈 포인트 재정비 — 어깨 열림 잡고 공 끝까지 끌기',
+      '사이드암 어깨 빨리 열리는거 잡는 운동 검색하기',
+    ]
   }
 ];
 
 // status: 'upcoming'=예정, 'done'=참석, 'absent'=불참
 const SCHEDULE = [
   { date: '2026-03-22', time: '09:00', venue: '진안구장', home: '불독스', away: '라이징스타', status: 'done' },
-  { date: '2026-03-29', time: '11:00', venue: '필연구장', home: '라이징스타', away: '스나이퍼스', status: 'upcoming' },
+  { date: '2026-03-29', time: '11:00', venue: '진안구장', home: '라이징스타', away: '스나이퍼스', status: 'done' },
   { date: '2026-04-05', time: '10:00', venue: '솔내구장', home: '라이징스타', away: '지니어스', status: 'upcoming' },
   { date: '2026-04-12', time: '12:00', venue: '필연구장', home: '라이징스타', away: '임팩트', status: 'upcoming' },
   { date: '2026-04-19', time: '16:00', venue: '효자구장', home: '연금이', away: '라이징스타', status: 'upcoming' },
   { date: '2026-04-26', time: '12:00', venue: '솔내구장', home: '승승장구 락', away: '라이징스타', status: 'upcoming' },
   { date: '2026-05-03', time: '09:00', venue: '진안구장', home: '미소렌터카', away: '라이징스타', status: 'upcoming' },
   { date: '2026-05-10', time: '08:00', venue: '효자구장', home: '라이징스타', away: '불독스', status: 'upcoming' },
-  { date: '2026-05-17', time: '08:00', venue: '필연구장', home: '스나이퍼', away: '라이징스타', status: 'upcoming' },
+  { date: '2026-05-17', time: '08:00', venue: '필연구장', home: '스나이퍼스', away: '라이징스타', status: 'upcoming' },
   { date: '2026-05-24', time: '10:00', venue: '솔내구장', home: '지니어스', away: '라이징스타', status: 'upcoming' },
   { date: '2026-05-31', time: '12:00', venue: '필연구장', home: '임팩트', away: '라이징스타', status: 'upcoming' },
   { date: '2026-06-07', time: '16:00', venue: '효자구장', home: '라이징스타', away: '연금이', status: 'upcoming' },
@@ -201,7 +239,7 @@ const SCHEDULE = [
   { date: '2026-09-06', time: '14:00', venue: '솔내구장', home: '미소렌터카', away: '라이징스타', status: 'upcoming' },
 ];
 
-const TODAY = '2026-03-22';
+const TODAY = '2026-03-29';
 
 function statusIcon(s) {
   const map = { O: ['O', 'O'], T: ['△', 'T'], X: ['✕', 'X'] };
