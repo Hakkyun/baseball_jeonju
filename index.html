@@ -2,8 +2,8 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>학균 경기일지</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>학균 야구 허브</title>
 <style>
 :root {
   --bg: #0f0f0f;
@@ -16,393 +16,372 @@
   --mint: #3DD6A3;
   --pink: #FF4F7B;
   --yellow: #FFD600;
-  --white: #ffffff;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; background: var(--bg); color: var(--text); padding: 24px; }
-.wrap { max-width: 800px; margin: 0 auto; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 48px 20px 40px;
+  max-width: 480px;
+  margin: 0 auto;
+}
 
-.header { margin-bottom: 28px; }
-.header-top { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
-h1 { font-size: 18px; font-weight: 500; color: var(--white); }
-.logo-dot { display: flex; gap: 4px; }
-.dot { width: 8px; height: 8px; border-radius: 50%; }
+/* 헤더 */
+.header { margin-bottom: 20px; }
+.subtitle { font-size: 11px; color: var(--text3); letter-spacing: 0.1em; margin-bottom: 6px; }
+.title-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.title { font-size: 22px; font-weight: 500; color: var(--text); }
+.dots { display: flex; gap: 3px; align-items: center; }
+.dot { width: 6px; height: 6px; border-radius: 50%; }
 .dot-mint { background: var(--mint); }
 .dot-pink { background: var(--pink); }
 .dot-yellow { background: var(--yellow); }
-.subtitle { font-size: 12px; color: var(--text3); }
-.section-title { font-size: 11px; font-weight: 500; color: var(--text3); letter-spacing: 0.1em; margin-bottom: 12px; text-transform: uppercase; }
+.gradient-bar { height: 2px; background: linear-gradient(90deg, var(--mint), var(--pink), var(--yellow)); border-radius: 2px; }
 
-.season-box { background: var(--bg2); border: 0.5px solid var(--border); border-radius: 14px; padding: 18px 20px; margin-bottom: 28px; }
-.season-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-.season-label { font-size: 11px; font-weight: 500; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; }
-.season-games { font-size: 12px; color: var(--text3); }
-.season-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
-.season-item { text-align: center; background: var(--bg3); border-radius: 10px; padding: 12px 6px; }
-.season-val { font-size: 20px; font-weight: 500; color: var(--text); }
-.season-val.good { color: var(--mint); }
-.season-val.bad { color: var(--pink); }
-.season-val.neutral { color: var(--yellow); }
-.season-lbl { font-size: 10px; color: var(--text3); margin-top: 3px; }
+/* 카드 공통 */
+.card { background: var(--bg2); border: 0.5px solid var(--border); border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; }
 
-.game-card { border: 0.5px solid var(--border); border-radius: 12px; margin-bottom: 10px; overflow: hidden; background: var(--bg2); }
-.game-header { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; cursor: pointer; user-select: none; }
-.game-header:hover { background: var(--bg3); }
-.game-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.game-date { font-size: 13px; font-weight: 500; color: var(--text); }
-.game-opponent { font-size: 12px; color: var(--text2); }
-.badge { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 9px; border-radius: 20px; }
-.badge-win { background: rgba(61,214,163,0.15); color: var(--mint); border: 0.5px solid rgba(61,214,163,0.3); }
-.badge-lose { background: rgba(255,79,123,0.15); color: var(--pink); border: 0.5px solid rgba(255,79,123,0.3); }
-.badge-draw { background: rgba(255,214,0,0.15); color: var(--yellow); border: 0.5px solid rgba(255,214,0,0.3); }
-.badge-nd { background: rgba(170,170,170,0.15); color: var(--text2); border: 0.5px solid rgba(170,170,170,0.2); }
-.chevron { font-size: 10px; color: var(--text3); transition: transform 0.2s; }
-.chevron.open { transform: rotate(180deg); }
-.game-body { padding: 14px 16px 16px; display: none; border-top: 0.5px solid var(--border); }
-.game-body.open { display: block; }
+/* 달력 카드 */
+.cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.cal-title { font-size: 13px; font-weight: 500; color: var(--text); }
+.cal-link { font-size: 11px; color: var(--text3); cursor: pointer; text-decoration: none; }
+.cal-link:hover { color: var(--text2); }
+.cal-days-label { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; margin-bottom: 6px; }
+.cal-days-label span { font-size: 10px; color: var(--text3); }
+.cal-days-label span.sun { color: var(--pink); }
+.cal-days { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; }
+.cal-day { font-size: 12px; color: var(--text3); padding: 5px 0; }
+.cal-day.today {
+  background: var(--mint);
+  color: #0f0f0f;
+  font-weight: 600;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+.cal-day.game-day {
+  border: 1.5px solid var(--pink);
+  color: var(--pink);
+  font-weight: 600;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+.cal-divider { height: 0.5px; background: var(--border); margin: 12px 0; }
+.next-game { display: flex; justify-content: space-between; align-items: center; }
+.next-game-info { }
+.next-game-label { font-size: 10px; color: var(--text3); letter-spacing: 0.06em; margin-bottom: 3px; }
+.next-game-main { font-size: 13px; font-weight: 500; color: var(--pink); margin-bottom: 2px; }
+.next-game-sub { font-size: 11px; color: var(--text3); }
+.dday-badge {
+  background: rgba(255,79,123,0.15);
+  border: 0.5px solid rgba(255,79,123,0.3);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--pink);
+}
 
-.stat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 12px; }
-.stat-item { background: var(--bg3); border-radius: 8px; padding: 10px 6px; text-align: center; }
-.stat-label { font-size: 10px; color: var(--text3); margin-bottom: 4px; }
-.stat-value { font-size: 15px; font-weight: 500; color: var(--text); }
-.stat-value.highlight { color: var(--mint); }
-.stat-value.bad { color: var(--pink); }
-.stat-value.neutral { color: var(--yellow); }
-.stat-value.small { font-size: 12px; }
+/* 오늘 루틴 */
+.routine-label { font-size: 10px; color: var(--text3); letter-spacing: 0.08em; margin-bottom: 10px; }
+.routine-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.routine-item {
+  background: var(--bg3);
+  border-radius: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: background 0.15s;
+  border: 0.5px solid transparent;
+}
+.routine-item:hover { border-color: rgba(61,214,163,0.3); }
+.routine-item p { font-size: 13px; color: var(--text); margin: 0; }
+.routine-hint { font-size: 10px; color: var(--text3); margin-top: 8px; }
 
-.feedback-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
-.feedback-card { border: 0.5px solid var(--border); border-radius: 10px; padding: 12px 13px; background: var(--bg3); }
-.feedback-title { font-size: 10px; font-weight: 500; color: var(--text3); margin-bottom: 8px; letter-spacing: 0.05em; text-transform: uppercase; }
-.feedback-text { font-size: 12px; color: var(--text2); line-height: 1.8; }
+/* 메뉴 */
+.menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+.menu-card {
+  background: var(--bg2);
+  border: 0.5px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 14px;
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+  transition: background 0.15s;
+}
+.menu-card:hover { background: var(--bg3); }
+.menu-card.mint { border-color: rgba(61,214,163,0.4); }
+.menu-card.yellow { border-color: rgba(255,214,0,0.4); }
+.menu-card.gray { border-color: var(--border); }
+.menu-card.pink { border-color: rgba(255,79,123,0.4); }
+.menu-tag { font-size: 10px; letter-spacing: 0.08em; margin-bottom: 10px; }
+.menu-tag.mint { color: var(--mint); }
+.menu-tag.yellow { color: var(--yellow); }
+.menu-tag.gray { color: var(--text2); }
+.menu-tag.pink { color: var(--pink); }
+.menu-name { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.menu-desc { font-size: 11px; color: var(--text3); }
 
-/* 지난 피드백 확인 */
-.review-card { border: 0.5px solid var(--border); border-radius: 10px; padding: 12px 13px; background: var(--bg3); margin-bottom: 8px; }
-.review-item { margin-bottom: 12px; }
-.review-item:last-child { margin-bottom: 0; }
-.review-topic { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 5px; }
-.review-eval { display: flex; align-items: flex-start; gap: 7px; font-size: 12px; color: var(--text2); line-height: 1.7; }
-.status-icon { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 50%; font-size: 9px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
-.status-O { background: rgba(61,214,163,0.2); color: var(--mint); border: 1px solid rgba(61,214,163,0.5); }
-.status-T { background: rgba(255,214,0,0.2); color: var(--yellow); border: 1px solid rgba(255,214,0,0.5); }
-.status-X { background: rgba(255,79,123,0.2); color: var(--pink); border: 1px solid rgba(255,79,123,0.5); }
+/* 시즌 요약 */
+.season-card {
+  background: var(--bg2);
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  text-decoration: none;
+}
+.season-card:hover { background: var(--bg3); }
+.season-stats { display: flex; gap: 16px; }
+.season-item { text-align: center; }
+.season-val { font-size: 15px; font-weight: 500; color: var(--text); }
+.season-val.mint { color: var(--mint); }
+.season-val.yellow { color: var(--yellow); }
+.season-lbl { font-size: 10px; color: var(--text3); margin-top: 2px; }
+.season-link { font-size: 11px; color: var(--text3); }
 
-/* 다음 경기 목표 */
-.next-card { border: 0.5px solid rgba(61,214,163,0.4); border-radius: 10px; padding: 12px 13px; background: rgba(61,214,163,0.05); margin-top: 8px; }
-.next-title { font-size: 10px; font-weight: 500; color: var(--mint); margin-bottom: 8px; letter-spacing: 0.05em; text-transform: uppercase; }
-.next-item { display: flex; gap: 8px; font-size: 12px; color: var(--text2); line-height: 1.8; margin-bottom: 2px; }
-.next-num { color: var(--mint); font-weight: 600; min-width: 16px; }
-
-.schedule-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
-.sched-item { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 8px; border: 0.5px solid var(--border); background: var(--bg2); }
-.sched-item.done { border-color: rgba(61,214,163,0.4); background: rgba(61,214,163,0.05); opacity: 0.7; }
-.sched-item.today { border-color: var(--mint); background: rgba(61,214,163,0.07); }
-.sched-item.absent { border-color: rgba(255,79,123,0.4); background: rgba(255,79,123,0.04); opacity: 0.7; }
-.sched-info { display: flex; flex-direction: column; gap: 3px; }
-.sched-match { font-size: 11px; color: var(--text2); }
-.sched-sub { font-size: 10px; color: var(--text3); }
-.sched-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); flex-shrink: 0; align-self: flex-start; margin-top: 3px; }
-.sched-dot.done { background: var(--mint); }
-.sched-dot.today { background: var(--mint); }
-.sched-dot.absent { background: var(--pink); }
-
-.divider { width: 100%; height: 0.5px; background: var(--border); margin: 24px 0; }
-.accent-bar { height: 2px; background: linear-gradient(90deg, var(--mint), var(--pink), var(--yellow)); border-radius: 2px; margin-bottom: 28px; }
+/* 팝업 */
+.popup-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.75);
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+.popup-overlay.open { display: flex; }
+.popup-box {
+  background: var(--bg2);
+  border: 0.5px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  width: 280px;
+  max-width: 90vw;
+}
+.popup-name { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+.popup-sets { font-size: 12px; color: var(--mint); margin-bottom: 14px; }
+.popup-points { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
+.popup-point { display: flex; gap: 8px; align-items: flex-start; }
+.popup-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--mint); margin-top: 6px; flex-shrink: 0; }
+.popup-point p { font-size: 12px; color: var(--text2); line-height: 1.6; margin: 0; }
+.popup-close { text-align: center; cursor: pointer; font-size: 12px; color: var(--text3); }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="header">
-    <div class="header-top">
-      <h1>학균 경기일지</h1>
-      <div class="logo-dot">
-        <div class="dot dot-mint"></div>
-        <div class="dot dot-pink"></div>
-        <div class="dot dot-yellow"></div>
-      </div>
+
+<div class="header">
+  <p class="subtitle">변학균 No.41 · 전주 라이징스타</p>
+  <div class="title-row">
+    <h1 class="title">학균 야구 허브</h1>
+    <div class="dots">
+      <div class="dot dot-mint"></div>
+      <div class="dot dot-pink"></div>
+      <div class="dot dot-yellow"></div>
     </div>
-    <p class="subtitle">변학균 No.41 · 전주 라이징스타 · 2026 시즌</p>
   </div>
+  <div class="gradient-bar"></div>
+</div>
 
-  <div class="accent-bar"></div>
-
-  <div class="section-title">2026 시즌 누적</div>
-  <div class="season-box">
-    <div class="season-top">
-      <span class="season-label">Pitching Stats</span>
-      <span class="season-games" id="season-games-label"></span>
+<!-- 달력 카드 -->
+<div class="card" id="cal-card">
+  <div class="cal-header">
+    <span class="cal-title" id="cal-title"></span>
+    <a class="cal-link" href="schedule.html">전체 일정 보기 →</a>
+  </div>
+  <div class="cal-days-label">
+    <span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span><span class="sun">일</span>
+  </div>
+  <div class="cal-days" id="cal-days"></div>
+  <div class="cal-divider"></div>
+  <div class="next-game">
+    <div class="next-game-info">
+      <p class="next-game-label" id="next-label"></p>
+      <p class="next-game-main" id="next-main"></p>
+      <p class="next-game-sub" id="next-sub"></p>
     </div>
-    <div class="season-grid" id="season-stats"></div>
+    <div class="dday-badge" id="dday-badge"></div>
   </div>
+</div>
 
-  <div class="divider"></div>
+<!-- 오늘 루틴 -->
+<div class="card" id="routine-card">
+  <p class="routine-label" id="routine-label"></p>
+  <div class="routine-grid" id="routine-grid"></div>
+  <p class="routine-hint">눌러서 상세 보기</p>
+</div>
 
-  <div class="section-title">경기 기록</div>
-  <div id="game-list"></div>
+<!-- 메뉴 -->
+<div class="menu-grid">
+  <a class="menu-card mint" href="warmup.html">
+    <p class="menu-tag mint">경기장</p>
+    <p class="menu-name">워밍업</p>
+    <p class="menu-desc">선발 루틴</p>
+  </a>
+  <a class="menu-card yellow" href="weekly.html">
+    <p class="menu-tag yellow">상시</p>
+    <p class="menu-name">주간 루틴</p>
+    <p class="menu-desc">요일별 훈련</p>
+  </a>
+</div>
+<div class="menu-grid">
+  <a class="menu-card gray" href="gamelog.html">
+    <p class="menu-tag gray">집 · 여유있을 때</p>
+    <p class="menu-name">경기일지</p>
+    <p class="menu-desc">기록 + 피드백</p>
+  </a>
+  <a class="menu-card pink" href="training.html">
+    <p class="menu-tag pink">집 · 연습장</p>
+    <p class="menu-name">연습 정보</p>
+    <p class="menu-desc">타격 기본기</p>
+  </a>
+</div>
 
-  <div class="divider"></div>
+<!-- 시즌 요약 -->
+<a class="season-card" href="gamelog.html" id="season-card">
+  <div class="season-stats" id="season-stats"></div>
+  <span class="season-link">경기일지 →</span>
+</a>
 
-  <div class="section-title">2026 시즌 일정</div>
-  <div class="schedule-grid" id="schedule"></div>
+<!-- 팝업 -->
+<div class="popup-overlay" id="popup" onclick="closePopup(event)">
+  <div class="popup-box">
+    <p class="popup-name" id="popup-name"></p>
+    <p class="popup-sets" id="popup-sets"></p>
+    <div class="popup-points" id="popup-points"></div>
+    <p class="popup-close" onclick="document.getElementById('popup').classList.remove('open')">닫기</p>
+  </div>
 </div>
 
 <script>
-const GAMES = [
-  {
-    id: 1,
-    date: '2026-03-22',
-    opponent: '불독스',
-    score: '8-8',
-    teamResult: 'draw',
-    decision: 'ND',
-    inn: '1.1',
-    outs: 4,
-    pitch: 30,
-    batters: 7,
-    hit: 3, bb: 0, hbp: 0, so: 2, er: 3,
-    feedback: '볼넷 0개 목표 달성. 직구 구위 팀/상대팀 모두 인정. 릴리즈 포인트 확신 오기 시작. 직구가 대부분 낮게 제구됨(낮은 몸쪽/바깥쪽). 같은 코스 반복으로 타자들 적응, 밀어쳐서 2루수/유격수 쪽 안타. 하이 패스트볼 필요. 체인지업 필요성(타자들이 앞에서 짧게 치는 패턴).',
-    good: '볼넷 0개\n직구 구위 확인\n릴리즈 포인트 확신 시작',
-    review: [
-      {
-        topic: '릴리즈 포인트 불안정 — 직구 위주로 제구 집중',
-        status: 'T',
-        eval: '볼넷 0개 달성, 릴리즈 포인트 확신 오기 시작. 다만 사이드~언더 높이가 아직 완전히 고정되진 않음. 계속 쌓아가는 중.'
-      }
-    ],
-    next: [
-      '하이 패스트볼 추가 — 낮은 코스와 섞어 타자 시선 흔들기',
-      '서클체인지업 사이드암 버전 테스트 (목요일 캐치볼)',
-      '릴리즈 포인트 일정하게 — 매 구 같은 팔 높이 유지',
-    ]
-  },
-  {
-    id: 2,
-    date: '2026-03-29',
-    opponent: '스나이퍼스',
-    score: '11-4',
-    teamResult: 'win',
-    decision: 'ND',
-    inn: '1.0',
-    outs: 3,
-    pitch: 15,
-    batters: 4,
-    hit: 0, bb: 0, hbp: 1, so: 2, er: 0,
-    feedback: '팔꿈치 통증(3루 송구 후유증) + 악력 저하 상태에서 등판. 구속 저번보다 떨어짐. 제구가 원하는 대로 안 됐고 스트라이크 던지는 것 자체를 목표로 조정. 어깨가 일찍 열리며 서클체인지업 릴리즈가 흐트러짐 — 사구도 이 영향. 너클커브가 사이드암에서 스위퍼처럼 꺾이며 예상 밖으로 잘 들어감. 직구+너클커브 조합으로 헛스윙 유도. 직구/너클커브/서클체인지업 3구종만 잡히면 충분히 경쟁력 있다는 확인.',
-    good: '무실점 (1이닝)\n삼진 2개\n너클커브 사이드암에서 스위퍼처럼 작동 확인\n하이 패스트볼 헛스윙 유도 성공',
-    review: [
-      {
-        topic: '하이 패스트볼 추가 — 낮은 코스와 섞어 타자 시선 흔들기',
-        status: 'O',
-        eval: '의도+비의도 혼합이었지만 하이 패스트볼 몇 개에서 헛스윙 유도 성공. 효과 확인.'
-      },
-      {
-        topic: '서클체인지업 사이드암 버전 테스트 (목요일 캐치볼)',
-        status: 'T',
-        eval: '금요일 캐치볼에서는 잘 됐으나 경기에서 어깨 열림으로 릴리즈 흐트러짐. 계속 개발 필요.'
-      },
-      {
-        topic: '릴리즈 포인트 일정하게 — 매 구 같은 팔 높이 유지',
-        status: 'X',
-        eval: '팔꿈치 통증+악력 저하로 릴리즈 포인트 불안정. 컨디션 영향이 컸음.'
-      }
-    ],
-    next: [
-      '몸 상태 우선 — 팔꿈치/무릎 회복 확인 후 등판, 캐치볼 강도 조절',
-      '너클커브 의도적으로 활용 — 직구와 조합, 스트라이크존 공략 집중',
-      '서클체인지업 릴리즈 포인트 재정비 — 어깨 열림 잡고 공 끝까지 끌기',
-      '사이드암 어깨 빨리 열리는거 잡는 운동 검색하기',
-    ]
+const DAY_MAP = { 0: '일', 1: '월', 2: '화', 3: '수', 4: '목', 5: '금', 6: '토' };
+const DAY_ORDER = ['월','화','수','목','금','토','일'];
+
+async function loadJSON(path) {
+  const res = await fetch(path);
+  return res.json();
+}
+
+function formatTime(t) {
+  const [h, m] = t.split(':');
+  const hour = parseInt(h);
+  return `${hour < 12 ? '오전' : '오후'} ${hour <= 12 ? hour : hour - 12}시${m !== '00' ? ' ' + m + '분' : ''}`;
+}
+
+function getDday(dateStr) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const target = new Date(dateStr + 'T00:00:00'); target.setHours(0,0,0,0);
+  return Math.round((target - today) / 86400000);
+}
+
+function getWeekRange() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const dow = today.getDay(); // 0=일
+  // 월요일 기준으로 주 시작
+  const diff = dow === 0 ? -6 : 1 - dow;
+  const mon = new Date(today); mon.setDate(today.getDate() + diff);
+  const days = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(mon); d.setDate(mon.getDate() + i);
+    days.push(d);
   }
-  ,
-  {
-    id: 3,
-    date: '2026-04-05',
-    opponent: '지니어스',
-    score: '13-17',
-    teamResult: 'lose',
-    decision: 'L',
-    inn: '3.0',
-    outs: 9,
-    pitch: 93,
-    batters: 21,
-    hit: 11, bb: 3, hbp: 4, so: 2, er: 12,
-    feedback: '왼무릎 통증으로 스트라이드 버팀이 안 되면서 몸이 빨리 열림 → 구위 저하 + 제구 붕괴. 수비 에러가 실제보다 적게 기록되어 자책 과다 산입. 공격이 빨리 끝나 쉬는 시간 부족으로 체력 회복 안 됨. 범타 유도형 투수로서 팀 수비력과의 구조적 불일치 확인. 영상으로 보니 밀어 던지는 느낌 — 모으기와 던지기가 뭉개짐. 장기적으로 구위/변화구 업그레이드 필요.',
-    good: '1회 깔끔하게 막음\n체력 떨어지기 전 직구 제구 양호',
-    review: [
-      {
-        topic: '몸 상태 우선 — 팔꿈치/무릎 회복 확인 후 등판, 캐치볼 강도 조절',
-        status: 'T',
-        eval: '확인 후 등판했으나 무릎 컨디션 불량. 일주일 간격이라 체크 자체의 의미는 제한적.'
-      },
-      {
-        topic: '너클커브 의도적으로 활용 — 직구와 조합, 스트라이크존 공략 집중',
-        status: 'T',
-        eval: '초반엔 통했으나 중반 이후 악력 저하로 제구 불안정. 후반 활용 한계 확인.'
-      },
-      {
-        topic: '서클체인지업 릴리즈 포인트 재정비 — 어깨 열림 잡고 공 끝까지 끌기',
-        status: 'T',
-        eval: '던지긴 했으나 3개 중 1개 정도만 만족. 악력 소모는 적었음.'
-      },
-      {
-        topic: '사이드암 어깨 빨리 열리는거 잡는 운동 검색하기',
-        status: 'T',
-        eval: '찾아보는 중. 폼 방향(언더 vs 사이드) 고민과 연결됨.'
-      }
-    ],
-    next: [
-      '폼 정립 우선 — 사이드암 기반으로 동영상 참고해서 골반 회전 전달되는 폼 실험',
-      '너클커브 악력 저하 대응 — 3회 이후 대체구종 또는 너클커브 그립 조정 실험',
-      '서클체인지업 재시도 — 폼 어느정도 잡힌 후 릴리즈 재정비',
-    ]
-  },
-  {
-    id: 4,
-    date: '2026-04-12',
-    opponent: '임팩트',
-    score: '2-22',
-    teamResult: 'lose',
-    decision: 'L',
-    inn: '4.0',
-    outs: 12,
-    pitch: 77,
-    batters: 28,
-    hit: 11, bb: 4, hbp: 3, so: 2, er: 1,
-    feedback: '처음부터 이길 생각 없이 폼과 공에 집중하는 것을 목표로 설정. 팔을 골반에 두고 골반 회전과 함께 나가도록 의식. 힘 빼고 던질수록 오히려 범타 유도 + 체력 유지 확인. 에러 10개로 실점 대부분 비자책. 후반부로 갈수록 수비도 안정되고 수월한 느낌까지 남. 영상으로 보니 여전히 언더에 가까운 폼 — 폼 정립이 최우선 과제임을 재확인.',
-    good: '목표(폼/공 집중) 달성\n팔을 골반에 두고 골반 회전 전달 감각 일부 확인\n힘 빼고 던질수록 범타 유도 확인\n4이닝 버팀 (전 경기 3이닝에서 향상)\n자책 1 (실점 18 중)',
-    review: [
-      {
-        topic: '폼 정립 우선 — 사이드암 기반으로 동영상 참고해서 골반 회전 전달되는 폼 실험',
-        status: 'T',
-        eval: '팔 각도 올리고 골반 회전 의식하며 던짐. 체력 소모 감소 확인. 아직 영상으론 언더에 가까워 계속 실험 필요.'
-      },
-      {
-        topic: '너클커브 악력 저하 대응 — 3회 이후 대체구종 또는 너클커브 그립 조정 실험',
-        status: 'T',
-        eval: '초반 위력 확인, 3회부터 악력 저하로 동일한 한계 반복. 그립 조정 실험은 미실시.'
-      },
-      {
-        topic: '서클체인지업 재시도 — 폼 어느정도 잡힌 후 릴리즈 재정비',
-        status: 'X',
-        eval: '던지지 못함. 폼 정립 후 재시도 예정.'
-      }
-    ],
-    next: [
-      '폼 정립 우선 — 사이드암 동영상 참고, 골반 회전 전달되는 폼 반복 실험 (캐치볼/불펜)',
-      '너클커브 그립 조정 실험 — 악력 저하 시에도 쓸 수 있는 그립 찾기',
-      '서클체인지업 재시도 — 폼 안정화 후 릴리즈 포인트 재정비',
-    ]
-  },
-  {
-    id: 5,
-    date: '2026-04-19',
-    opponent: '연금이',
-    score: '12-9',
-    teamResult: 'win',
-    decision: 'ND',
-    inn: '1.0',
-    outs: 3,
-    pitch: 36,
-    batters: 9,
-    hit: 5, bb: 1, hbp: 0, so: 3, er: 4,
-    feedback: '불펜 구원. 오버핸드로 등판. 전력질주 후 즉시 마운드(무사만루) — 숨찬 상태에서 시작. 포수와 변화구 사인 조율 시간 없어 직구 위주로만 운영. 100% 힘으로 던지니 체인지업 밋밋하고 직구만 들어가면서 연속 안타 허용. 오버 오랜만이라 셋포지션 폼 무뎌짐(백스윙 커짐). 와인드업은 그나마 괜찮았음. 팔 컨디션 불량으로 팔로우스루 의식해야 나오는 상태. 이 시즌 방향 확정 — 선발은 오버, 불펜은 언더로 이원화.',
-    good: '최악 조건(급등판+무사만루+숨참)에서 삼진 3개\n오버 기준 볼넷 1개 (제구 살아있음 확인)\n와인드업 폼 그나마 유지',
-    review: [
-      {
-        topic: '폼 정립 우선 — 사이드암 동영상 참고, 골반 회전 전달되는 폼 반복 실험 (캐치볼/불펜)',
-        status: 'X',
-        eval: '사이드암 포기. 선발 오버/불펜 언더로 방향 전환.'
-      },
-      {
-        topic: '너클커브 그립 조정 실험 — 악력 저하 시에도 쓸 수 있는 그립 찾기',
-        status: 'X',
-        eval: '사이드암 포기로 해당 없음. 방향 전환.'
-      },
-      {
-        topic: '서클체인지업 재시도 — 폼 안정화 후 릴리즈 포인트 재정비',
-        status: 'X',
-        eval: '사이드암 기준이었으므로 해당 없음. 오버 기준으로 재접근 필요.'
-      }
-    ],
-    next: [
-      '오버(선발) — 서클체인지업 80% 강도로 낙폭/릴리즈 집중',
-      '오버(선발) — 셋포지션 폼 정비 (백스윙 줄이기)',
-      '언더(불펜) — 커브 하나로 직구 조합 운영 연습',
-      '급등판 대비 — 포수와 사전 사인 조율 루틴 만들기',
-    ]
+  return days;
+}
+
+function renderCalendar(schedule) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const days = getWeekRange();
+  const mon = days[0]; const sun = days[6];
+
+  // 주차 표시
+  const fmt = d => `${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+  document.getElementById('cal-title').textContent =
+    `${today.getMonth()+1}월 · ${fmt(mon)} — ${fmt(sun)}`;
+
+  // 날짜 렌더
+  const gameDates = schedule.map(g => g.date);
+  const calEl = document.getElementById('cal-days');
+  calEl.innerHTML = days.map(d => {
+    const isToday = d.getTime() === today.getTime();
+    const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    const isGame = gameDates.includes(dateStr);
+    if (isToday) return `<div class="cal-day today">${d.getDate()}</div>`;
+    if (isGame) return `<div class="cal-day game-day">${d.getDate()}</div>`;
+    return `<div class="cal-day">${d.getDate()}</div>`;
+  }).join('');
+
+  // 다음 경기
+  const upcoming = schedule
+    .filter(g => g.status === 'upcoming')
+    .sort((a,b) => a.date.localeCompare(b.date));
+  if (upcoming.length > 0) {
+    const next = upcoming[0];
+    const dday = getDday(next.date);
+    const myTeam = '라이징스타';
+    const isHome = next.home === myTeam;
+    const opponent = isHome ? next.away : next.home;
+    const [y,m,d] = next.date.split('-');
+    const dateLabel = `${m}.${d} 일요일`;
+
+    document.getElementById('next-label').textContent = `${dateLabel}`;
+    document.getElementById('next-main').textContent = `vs ${opponent} · ${formatTime(next.time)}`;
+    document.getElementById('next-sub').textContent = `${next.venue} · ${isHome ? '홈' : '원정'}`;
+    document.getElementById('dday-badge').textContent = dday === 0 ? 'D-DAY' : `D-${dday}`;
   }
-];
-
-// status: 'upcoming'=예정, 'done'=참석, 'absent'=불참
-const SCHEDULE = [
-  { date: '2026-03-22', time: '09:00', venue: '진안구장', home: '불독스', away: '라이징스타', status: 'done' },
-  { date: '2026-03-29', time: '11:00', venue: '진안구장', home: '라이징스타', away: '스나이퍼스', status: 'done' },
-  { date: '2026-04-05', time: '10:00', venue: '솔내구장', home: '라이징스타', away: '지니어스', status: 'done' },
-  { date: '2026-04-12', time: '12:00', venue: '효자구장', home: '라이징스타', away: '임팩트', status: 'done' },
-  { date: '2026-04-19', time: '16:00', venue: '효자구장', home: '연금이', away: '라이징스타', status: 'done' },
-  { date: '2026-04-26', time: '12:00', venue: '솔내구장', home: '승승장구 락', away: '라이징스타', status: 'upcoming' },
-  { date: '2026-05-03', time: '09:00', venue: '진안구장', home: '미소렌터카', away: '라이징스타', status: 'upcoming' },
-  { date: '2026-05-10', time: '08:00', venue: '효자구장', home: '라이징스타', away: '불독스', status: 'upcoming' },
-  { date: '2026-05-17', time: '08:00', venue: '필연구장', home: '스나이퍼스', away: '라이징스타', status: 'upcoming' },
-  { date: '2026-05-24', time: '10:00', venue: '솔내구장', home: '지니어스', away: '라이징스타', status: 'upcoming' },
-  { date: '2026-05-31', time: '12:00', venue: '필연구장', home: '임팩트', away: '라이징스타', status: 'upcoming' },
-  { date: '2026-06-07', time: '16:00', venue: '효자구장', home: '라이징스타', away: '연금이', status: 'upcoming' },
-  { date: '2026-06-14', time: '14:00', venue: '솔내구장', home: '라이징스타', away: '승승장구 락', status: 'upcoming' },
-  { date: '2026-06-21', time: '14:00', venue: '솔내구장', home: '라이징스타', away: '미소렌터카', status: 'upcoming' },
-  { date: '2026-06-28', time: '08:00', venue: '솔내구장', home: '불독스', away: '라이징스타', status: 'upcoming' },
-  { date: '2026-07-05', time: '10:00', venue: '효자구장', home: '라이징스타', away: '스나이퍼스', status: 'upcoming' },
-  { date: '2026-07-12', time: '08:00', venue: '필연구장', home: '라이징스타', away: '지니어스', status: 'upcoming' },
-  { date: '2026-07-19', time: '14:00', venue: '솔내구장', home: '라이징스타', away: '임팩트', status: 'upcoming' },
-  { date: '2026-07-26', time: '16:00', venue: '효자구장', home: '연금이', away: '라이징스타', status: 'upcoming' },
-  { date: '2026-08-23', time: '08:00', venue: '효자구장', home: '승승장구 락', away: '라이징스타', status: 'upcoming' },
-  { date: '2026-09-06', time: '14:00', venue: '솔내구장', home: '미소렌터카', away: '라이징스타', status: 'upcoming' },
-];
-
-const TODAY = '2026-04-19';
-
-function statusIcon(s) {
-  const map = { O: ['O', 'O'], T: ['△', 'T'], X: ['✕', 'X'] };
-  const [char, cls] = map[s] || ['?', 'X'];
-  return `<span class="status-icon status-${s}">${char}</span>`;
 }
 
-function decisionBadge(d) {
-  if (d === 'W') return '<span class="badge badge-win">학균 : 승</span>';
-  if (d === 'L') return '<span class="badge badge-lose">학균 : 패</span>';
-  if (d === 'S') return '<span class="badge badge-win">학균 : 세이브</span>';
-  return '<span class="badge badge-nd">학균 : 노디시전</span>';
+function renderRoutine(routine) {
+  const today = new Date();
+  const dayKey = DAY_MAP[today.getDay()];
+  const data = routine[dayKey];
+
+  document.getElementById('routine-label').textContent =
+    `오늘 루틴 · ${dayKey}요일${data?.note ? ' · ' + data.note : ''}`;
+
+  const grid = document.getElementById('routine-grid');
+  if (!data || !data.items.length) {
+    grid.innerHTML = `<p style="font-size:13px;color:var(--text3);grid-column:span 2;">오늘은 루틴이 없어요 😴</p>`;
+    return;
+  }
+  grid.innerHTML = data.items.map((item, i) => `
+    <div class="routine-item" onclick="openPopup(${i})">
+      <p>${item.name}</p>
+    </div>
+  `).join('');
+
+  window._routineItems = data.items;
 }
 
-function decisionLabel(d) {
-  if (d === 'W') return { text: '승', cls: 'highlight' };
-  if (d === 'L') return { text: '패', cls: 'bad' };
-  if (d === 'S') return { text: '세이브', cls: 'highlight' };
-  return { text: '노디시전', cls: 'neutral small' };
-}
-
-function teamResultBadge(r) {
-  if (r === 'win') return '<span class="badge badge-win">승</span>';
-  if (r === 'lose') return '<span class="badge badge-lose">패</span>';
-  return '<span class="badge badge-draw">무</span>';
-}
-
-function renderSeasonStats() {
-  const totalOuts = GAMES.reduce((s, g) => s + (g.outs || 0), 0);
-  const totalER = GAMES.reduce((s, g) => s + (g.er || 0), 0);
-  const totalBB = GAMES.reduce((s, g) => s + (g.bb || 0) + (g.hbp || 0), 0);
-  const totalSO = GAMES.reduce((s, g) => s + (g.so || 0), 0);
-  const totalHit = GAMES.reduce((s, g) => s + (g.hit || 0), 0);
-  const wins = GAMES.filter(g => g.decision === 'W').length;
-  const losses = GAMES.filter(g => g.decision === 'L').length;
-  const saves = GAMES.filter(g => g.decision === 'S').length;
-
+function renderSeason(games) {
+  const totalOuts = games.reduce((s,g) => s + (g.outs||0), 0);
+  const totalER = games.reduce((s,g) => s + (g.er||0), 0);
+  const totalSO = games.reduce((s,g) => s + (g.so||0), 0);
+  const totalBB = games.reduce((s,g) => s + (g.bb||0) + (g.hbp||0), 0);
+  const wins = games.filter(g=>g.decision==='W').length;
+  const losses = games.filter(g=>g.decision==='L').length;
+  const saves = games.filter(g=>g.decision==='S').length;
   const innVal = totalOuts / 3;
   const era = innVal > 0 ? (totalER / innVal * 7).toFixed(2) : '-';
-  const innFmt = `${Math.floor(totalOuts / 3)}.${totalOuts % 3}`;
+  const innFmt = `${Math.floor(totalOuts/3)}.${totalOuts%3}`;
 
-  document.getElementById('season-games-label').textContent = `${GAMES.length}경기 등판`;
   document.getElementById('season-stats').innerHTML = `
     <div class="season-item">
-      <div class="season-val" style="font-size:16px;">${wins}-${losses}-${saves}</div>
+      <div class="season-val">${wins}-${losses}-${saves}</div>
       <div class="season-lbl">승-패-세</div>
     </div>
     <div class="season-item">
@@ -410,138 +389,48 @@ function renderSeasonStats() {
       <div class="season-lbl">이닝</div>
     </div>
     <div class="season-item">
-      <div class="season-val ${parseFloat(era) <= 5 ? 'good' : parseFloat(era) <= 8 ? 'neutral' : 'bad'}">${era}</div>
-      <div class="season-lbl">평균자책점</div>
+      <div class="season-val yellow">${era}</div>
+      <div class="season-lbl">ERA</div>
     </div>
     <div class="season-item">
-      <div class="season-val">${totalSO}</div>
+      <div class="season-val mint">${totalSO}</div>
       <div class="season-lbl">삼진</div>
     </div>
-    <div class="season-item">
-      <div class="season-val">${totalBB}</div>
-      <div class="season-lbl">4사구</div>
-    </div>
-    <div class="season-item">
-      <div class="season-val">${totalHit}</div>
-      <div class="season-lbl">피안타</div>
-    </div>
   `;
 }
 
-function formatDate(d) {
-  const dt = new Date(d + 'T00:00:00');
-  return `${dt.getFullYear()}.${String(dt.getMonth()+1).padStart(2,'0')}.${String(dt.getDate()).padStart(2,'0')}`;
-}
-
-function renderReview(review) {
-  if (!review || review.length === 0) return '';
-  const items = review.map(r => `
-    <div class="review-item">
-      <div class="review-topic">${r.topic}</div>
-      <div class="review-eval">${statusIcon(r.status)}<span>${r.eval}</span></div>
+function openPopup(idx) {
+  const item = window._routineItems[idx];
+  if (!item) return;
+  document.getElementById('popup-name').textContent = item.name;
+  document.getElementById('popup-sets').textContent = item.sets || '';
+  document.getElementById('popup-points').innerHTML = (item.points||[]).map(p => `
+    <div class="popup-point">
+      <div class="popup-dot"></div>
+      <p>${p}</p>
     </div>
   `).join('');
-  return `
-    <div class="review-card">
-      <div class="feedback-title">🔍 지난 피드백 확인</div>
-      ${items}
-    </div>
-  `;
+  document.getElementById('popup').classList.add('open');
 }
 
-function renderNext(next) {
-  if (!next || next.length === 0) return '';
-  const items = next.map((n, i) => `
-    <div class="next-item">
-      <span class="next-num">${i + 1}.</span>
-      <span>${n}</span>
-    </div>
-  `).join('');
-  return `
-    <div class="next-card">
-      <div class="next-title">▶ 다음 경기 목표</div>
-      ${items}
-    </div>
-  `;
+function closePopup(e) {
+  if (e.target === document.getElementById('popup')) {
+    document.getElementById('popup').classList.remove('open');
+  }
 }
 
-function renderGames() {
-  const list = document.getElementById('game-list');
-  list.innerHTML = [...GAMES].reverse().map(g => {
-    const dl = decisionLabel(g.decision);
-    return `
-    <div class="game-card">
-      <div class="game-header" onclick="toggleCard(${g.id})">
-        <div class="game-meta">
-          <span class="game-date">${formatDate(g.date)}</span>
-          <span class="game-opponent">vs ${g.opponent} ${g.score}</span>
-          ${teamResultBadge(g.teamResult)}
-          ${decisionBadge(g.decision)}
-        </div>
-        <span class="chevron" id="chev-${g.id}">▼</span>
-      </div>
-      <div class="game-body" id="body-${g.id}">
-        <div class="stat-grid">
-          <div class="stat-item"><div class="stat-label">팀</div><div class="stat-value ${dl.cls === 'highlight' ? '' : dl.cls}">${teamResultBadge(g.teamResult)}</div></div>
-          <div class="stat-item"><div class="stat-label">학균</div><div class="stat-value ${dl.cls}">${dl.text}</div></div>
-          <div class="stat-item"><div class="stat-label">이닝</div><div class="stat-value">${g.inn}</div></div>
-          <div class="stat-item"><div class="stat-label">투구수</div><div class="stat-value">${g.pitch ?? '-'}</div></div>
-          <div class="stat-item"><div class="stat-label">상대타자</div><div class="stat-value">${g.batters ?? '-'}</div></div>
-          <div class="stat-item"><div class="stat-label">피안타</div><div class="stat-value ${(g.hit||0) >= 6 ? 'bad' : ''}">${g.hit ?? '-'}</div></div>
-          <div class="stat-item"><div class="stat-label">볼넷</div><div class="stat-value ${g.bb === 0 ? 'highlight' : (g.bb||0) >= 3 ? 'bad' : ''}">${g.bb ?? '-'}</div></div>
-          <div class="stat-item"><div class="stat-label">사구</div><div class="stat-value ${(g.hbp||0) === 0 ? 'highlight' : (g.hbp||0) >= 3 ? 'bad' : ''}">${g.hbp ?? '-'}</div></div>
-          <div class="stat-item"><div class="stat-label">삼진</div><div class="stat-value ${(g.so||0) >= 3 ? 'highlight' : ''}">${g.so ?? '-'}</div></div>
-          <div class="stat-item"><div class="stat-label">자책</div><div class="stat-value ${(g.er||0) <= 3 ? 'highlight' : (g.er||0) <= 6 ? 'neutral' : 'bad'}">${g.er ?? '-'}</div></div>
-        </div>
-        <div class="feedback-row">
-          <div class="feedback-card">
-            <div class="feedback-title">✓ 잘된 점</div>
-            <div class="feedback-text">${(g.good||'').split('\n').filter(Boolean).join('<br>') || '-'}</div>
-          </div>
-          <div class="feedback-card">
-            <div class="feedback-title">📝 피드백</div>
-            <div class="feedback-text">${g.feedback || '-'}</div>
-          </div>
-        </div>
-        ${renderReview(g.review)}
-        ${renderNext(g.next)}
-      </div>
-    </div>
-  `}).join('');
+async function init() {
+  const [routine, schedule, games] = await Promise.all([
+    loadJSON('data/routine.json'),
+    loadJSON('data/schedule.json'),
+    loadJSON('data/games.json'),
+  ]);
+  renderCalendar(schedule);
+  renderRoutine(routine);
+  renderSeason(games);
 }
 
-function toggleCard(id) {
-  document.getElementById(`body-${id}`).classList.toggle('open');
-  document.getElementById(`chev-${id}`).classList.toggle('open');
-}
-
-function renderSchedule() {
-  const el = document.getElementById('schedule');
-  el.innerHTML = SCHEDULE.map(s => {
-    const isToday = s.date === TODAY;
-    let cls = '';
-    let dotCls = '';
-    if (s.status === 'absent') { cls = 'absent'; dotCls = 'absent'; }
-    else if (s.status === 'done') { cls = 'done'; dotCls = 'done'; }
-    else if (isToday) { cls = 'today'; dotCls = 'today'; }
-    const d = new Date(s.date + 'T00:00:00');
-    const dateStr = `${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
-    const isHome = s.home === '라이징스타';
-    const opponent = isHome ? s.away : s.home;
-    const homeAway = isHome ? '홈' : '어웨이';
-    return `<div class="sched-item ${cls}">
-      <div class="sched-dot ${dotCls}"></div>
-      <div class="sched-info">
-        <span class="sched-match">${dateStr} · vs ${opponent} (${homeAway})</span>
-        <span class="sched-sub">${s.time} · ${s.venue}</span>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-renderSeasonStats();
-renderGames();
-renderSchedule();
+init();
 </script>
 </body>
 </html>

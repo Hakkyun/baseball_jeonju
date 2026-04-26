@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>타격 기본기 · 학균</title>
+<style>
+:root {
+  --bg: #0f0f0f;
+  --bg2: #1a1a1a;
+  --bg3: #242424;
+  --border: #2e2e2e;
+  --text: #f0f0f0;
+  --text2: #aaa;
+  --text3: #555;
+  --mint: #3DD6A3;
+  --pink: #FF4F7B;
+  --yellow: #FFD600;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 48px 20px 40px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.back { font-size: 11px; color: var(--text3); margin-bottom: 12px; display: block; text-decoration: none; }
+.back:hover { color: var(--text2); }
+.title-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.title { font-size: 22px; font-weight: 500; color: var(--text); }
+.dots { display: flex; gap: 3px; }
+.dot { width: 6px; height: 6px; border-radius: 50%; }
+.dot-mint { background: var(--mint); }
+.dot-pink { background: var(--pink); }
+.dot-yellow { background: var(--yellow); }
+.subtitle { font-size: 11px; color: var(--text3); margin-bottom: 10px; }
+.gradient-bar { height: 2px; background: linear-gradient(90deg, var(--mint), var(--pink), var(--yellow)); border-radius: 2px; margin-bottom: 20px; }
+
+/* 섹션 */
+.section { margin-bottom: 12px; }
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--bg2); border: 0.5px solid var(--border);
+  border-radius: 12px; padding: 14px 16px; cursor: pointer;
+  user-select: none; transition: background 0.15s;
+}
+.section-header:active { background: var(--bg3); }
+.section-header.open { border-radius: 12px 12px 0 0; border-bottom-color: transparent; }
+.section-left { }
+.section-num { font-size: 10px; color: var(--pink); letter-spacing: 0.08em; margin-bottom: 4px; }
+.section-title { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.section-tag { font-size: 11px; color: var(--text3); }
+.chevron { font-size: 11px; color: var(--text3); transition: transform 0.2s; }
+.chevron.open { transform: rotate(180deg); }
+
+.section-body {
+  display: none;
+  background: var(--bg2);
+  border: 0.5px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  padding: 0 16px 16px;
+}
+.section-body.open { display: block; }
+
+/* 준비 자세 */
+.prep-box { background: var(--bg3); border-radius: 10px; padding: 12px 14px; margin-bottom: 12px; }
+.prep-title { font-size: 10px; color: var(--text3); letter-spacing: 0.08em; margin-bottom: 8px; }
+.prep-item { display: flex; gap: 8px; margin-bottom: 5px; }
+.prep-item:last-child { margin-bottom: 0; }
+.prep-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--text3); margin-top: 6px; flex-shrink: 0; }
+.prep-text { font-size: 12px; color: var(--text2); line-height: 1.6; }
+
+/* 스텝 */
+.step-title { font-size: 11px; color: var(--mint); letter-spacing: 0.06em; margin: 12px 0 8px; }
+.step-item { display: flex; gap: 10px; margin-bottom: 6px; align-items: flex-start; }
+.step-num { font-size: 12px; font-weight: 600; color: var(--mint); flex-shrink: 0; min-width: 20px; }
+.step-text { font-size: 12px; color: var(--text2); line-height: 1.7; }
+
+/* 핵심 포인트 */
+.key-box { background: rgba(255,214,0,0.05); border: 0.5px solid rgba(255,214,0,0.25); border-radius: 10px; padding: 12px 14px; margin: 12px 0; }
+.key-title { font-size: 10px; color: var(--yellow); letter-spacing: 0.08em; margin-bottom: 8px; }
+.key-item { display: flex; gap: 8px; margin-bottom: 5px; }
+.key-item:last-child { margin-bottom: 0; }
+.key-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--yellow); margin-top: 6px; flex-shrink: 0; }
+.key-text { font-size: 12px; color: var(--text2); line-height: 1.6; }
+
+/* 연습 순서 */
+.practice-box { background: rgba(61,214,163,0.05); border: 0.5px solid rgba(61,214,163,0.25); border-radius: 10px; padding: 12px 14px; margin-top: 12px; }
+.practice-title { font-size: 10px; color: var(--mint); letter-spacing: 0.08em; margin-bottom: 8px; }
+.practice-item { display: flex; gap: 10px; margin-bottom: 6px; }
+.practice-item:last-child { margin-bottom: 0; }
+.practice-num { font-size: 12px; font-weight: 600; color: var(--mint); flex-shrink: 0; }
+.practice-text { font-size: 12px; color: var(--text2); line-height: 1.7; }
+</style>
+</head>
+<body>
+
+<a class="back" href="training.html">← 연습 정보로 돌아가기</a>
+<div class="title-row">
+  <h1 class="title">타격 기본기 3가지</h1>
+  <div class="dots">
+    <div class="dot dot-mint"></div>
+    <div class="dot dot-pink"></div>
+    <div class="dot dot-yellow"></div>
+  </div>
+</div>
+<p class="subtitle">글러브야구레슨 · 혼자 연습하기 가이드</p>
+<div class="gradient-bar"></div>
+
+<!-- 1. Holding To Stride -->
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)">
+    <div class="section-left">
+      <p class="section-num">01 · HOLDING TO STRIDE</p>
+      <p class="section-title">타이밍이 늦다면?</p>
+      <p class="section-tag">스트라이드 · 홀드 · 스윙 분리</p>
+    </div>
+    <span class="chevron">▼</span>
+  </div>
+  <div class="section-body">
+    <div class="prep-box">
+      <p class="prep-title">준비 자세</p>
+      <div class="prep-item"><div class="prep-dot"></div><p class="prep-text">양발을 어깨너비로 벌리고 서기</p></div>
+      <div class="prep-item"><div class="prep-dot"></div><p class="prep-text">무릎을 살짝 구부려 힘 빼기</p></div>
+      <div class="prep-item"><div class="prep-dot"></div><p class="prep-text">배트를 뒷귀 옆에 세워서 들기 — 배트가 거의 수직에 가깝게</p></div>
+      <div class="prep-item"><div class="prep-dot"></div><p class="prep-text">뒷발(오른발)에 체중 60~70% 실기</p></div>
+      <div class="prep-item"><div class="prep-dot"></div><p class="prep-text">앞발(왼발)은 살짝 들릴 정도로 가볍게</p></div>
+    </div>
+
+    <p class="step-title">STEP 1 · 스트라이드 (앞발 내딛기)</p>
+    <div class="step-item"><span class="step-num">→</span><p class="step-text">앞발을 투수 방향으로 천천히 내딛기 — 보폭은 주먹 하나 정도</p></div>
+    <div class="step-item"><span class="step-num">→</span><p class="step-text">발을 내딛는 동안 손과 배트는 절대 움직이지 않음</p></div>
+    <div class="key-box">
+      <p class="key-title">핵심 포인트</p>
+      <div class="key-item"><div class="key-dot"></div><p class="key-text">발이 나갈 때 어깨가 같이 열리면 안 됨</p></div>
+      <div class="key-item"><div class="key-dot"></div><p class="key-text">앞발 착지 전에 손목이 앞으로 나오면 이미 타이밍 늦은 것</p></div>
+    </div>
+
+    <p class="step-title">STEP 2 · 착지 & 홀드</p>
+    <div class="step-item"><span class="step-num">→</span><p class="step-text">앞발이 착지할 때 발끝이 살짝 열리며(10~15도) 땅을 밟기</p></div>
+    <div class="step-item"><span class="step-num">→</span><p class="step-text">착지 순간 잠깐 멈추는 느낌 — 이 찰나가 "홀드"</p></div>
+    <div class="step-item"><span class="step-num">→</span><p class="step-text">이 순간 체중은 아직 뒷발에 남아있음</p></div>
+    <div class="key-box">
+      <p class="key-title">핵심 포인트</p>
+      <div class="key-item"><div class="key-dot"></div><p class="key-text">착지할 때 앞무릎이 안쪽으로 꺾이면 안 됨</p></div>
+      <div class="key-item"><div class="key-dot"></div><p class="key-text">착지와 동시에 스윙하면 안 됨. 착지 → 홀드 → 스윙 순서가 분리되어야 함</p></div>
+    </div>
+
+    <p class="step-title">STEP 3 · 스윙 트리거</p>
+    <div class="step-item"><span class="step-num">→</span><p class="step-text">착지 완료 확인 후 골반부터 회전 시작</p></div>
+    <div class="step-item"><span class="step-num">→</span><p class="step-text">뒷발 뒤꿈치가 들리면서 골반이 투수 방향으로 열림</p></div>
+    <div class="key-box">
+      <p class="key-title">핵심 포인트</p>
+      <div class="key-item"><div class="key-dot"></div><p class="key-text">손이 먼저 나오면 안 됨. 골반 → 상체 → 손 → 배트 헤드 순서</p></div>
+      <div class="key-item"><div class="key-dot"></div><p class="key-text">스윙할 때 그립을 꽉 쥐면 안 됨. 배트 스피드 오히려 죽음</p></div>
+    </div>
+
+    <div class="practice-box">
+      <p class="practice-title">처음 연습 순서</p>
+      <div class="practice-item"><span class="practice-num">1.</span><p class="practice-text">배트 없이 손만으로 — 발 내딛고 → 홀드 → 골반 회전 10회</p></div>
+      <div class="practice-item"><span class="practice-num">2.</span><p class="practice-text">슬로우 모션으로 배트 들고 — 각 단계에서 멈추면서 자세 확인 10회</p></div>
+      <div class="practice-item"><span class="practice-num">3.</span><p class="practice-text">정상 속도 — 머릿속으로 "발 → 홀드 → 스윙" 구호 넣으면서 10회</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- 2. Holding The Barrel -->
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)">
+    <div class="section-left">
+      <p class="section-num">02 · HOLDING THE BARREL</p>
+      <p class="section-title">땅볼이 너무 많다면?</p>
+      <p class="section-tag">배럴 유지 · 다운스윙 방지</p>
+    </div>
+    <span class="chevron">▼</span>
+  </div>
+  <div class="section-body">
+    <div class="prep-box">
+      <p class="prep-title">준비 자세</p>
+      <div class="prep-item"><div class="prep-dot"></div><p class="prep-text">배트를 들 때 배트 헤드(끝부분)가 손보다 확실히 위/뒤에 위치</p></div>
+      <div class="prep-item"><div class="prep-dot"></div><p class="prep-text">손은 어깨 높이, 배트 헤드는 머리 뒤쪽 높이</p></div>
+    </div>
+    <div class="key-box">
+      <p class="key-title">핵심 포인트</p>
+      <div class="key-item"><div class="key-dot"></div><p class="key-text">배트를 너무 눕혀서 들면 안 됨. 배트 헤드가 손보다 낮으면 이미 배럴이 떨어진 것</p></div>
+    </div>
+
+    <p class="step-title">STEP 1 · 스윙 시작</p>
+    <div class="step-item"><span class="step-num">→</span><p class="step-text">골반 회전과 함께 손이 볼 쪽으로 이동 시작</p></div>
+    <div class="step-item"><span class="step-num">→</span><p class="step-text">팔꿈치가 먼저 나오는 느낌 — 손목은 아직 안 풀림</p></div>
+    <div class="step-item"><span class="step-num">→</span><p class="step-text">배트 헤드는 뒤에 남겨두는 느낌으로</p></div>
+    <div class="key-box">
+      <p class="key-title">핵심 포인트</p>
+      <div class="key-item"><div class="key-dot"></div><p class="key-text">배트 헤드가 손과 동시에 나오면 안 됨. 손이 리드하고 배트 헤드는 끌려오는 구조</p></div>
+      <div class="key-item"><div class="key-dot"></div><p class="key-text">이 구간에서 배트 헤드가 어깨 아래로 떨어지면 다운스윙 → 땅볼</p></div>
+    </div>
+
+    <p class="step-title">STEP 2 · 스윙 중반</p>
+    <div class="step-item"><span class="step-num">→</span><p class="step-text">손이 볼 앞쪽까지 이동하는 동안 배트 헤드는 계속 뒤처진 상태</p></div>
+    <div class="step-item"><span class="step-num">→</span><p class="step-text">양팔이 몸 앞에서 V자 모양 유지</p></div>
+    <div class="key-box">
+      <p class="key-title">핵심 포인트</p>
+      <div class="key-item"><div class="key-dot"></div><p class="key-text">앞팔(왼팔)이 일찍 펴지면 안 됨. 팔꿈치가 살짝 구부러진 상태 유지</p></div>
+      <div class="key-item"><div class="key-dot"></div><p class="key-text">배트 헤드가 볼 높이보다 낮아지는 순간 땅볼 확정. 볼 높이와 평행하게 유지</p></div>
+    </div>
+
+    <p class="step-title">STEP 3 · 임팩트</p>
+    <div class="step-item"><span class="step-num">→</span><p class="step-text">손이 볼 위치에 도달하면 배트 헤드가 가속되며 볼과 만남</p></div>
+    <div class="step-item"><span class="step-num">→</span><p class="step-text">손목은 임팩트 직전에 자연스럽게 풀림 — 억지로 치지 않음</p></div>
+    <div class="key-box">
+      <p class="key-title">핵심 포인트</p>
+      <div class="key-item"><div class="key-dot"></div><p class="key-text">임팩트 후 배트가 아래로 내려가면 안 됨. 팔로우스루가 어깨 위까지 올라와야 함</p></div>
+      <div class="key-item"><div class="key-dot"></div><p class="key-text">힘으로 치려고 하면 배럴이 일찍 떨어짐. 배럴을 뒤에 참을수록 타구가 강해짐</p></div>
+    </div>
+
+    <div class="practice-box">
+      <p class="practice-title">처음 연습 순서</p>
+      <div class="practice-item"><span class="practice-num">1.</span><p class="practice-text">배트 없이 — 팔꿈치 먼저 나오는 느낌으로 슬로우 스윙 10회</p></div>
+      <div class="practice-item"><span class="practice-num">2.</span><p class="practice-text">슬로우 모션으로 배트 들고 — 배트 헤드가 손보다 늦게 나오는지 확인 10회</p></div>
+      <div class="practice-item"><span class="practice-num">3.</span><p class="practice-text">티배팅 — 라인드라이브로 뜨는지 확인. 땅볼 나오면 배럴 일찍 떨어진 것</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. Cocking The Grip -->
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)">
+    <div class="section-left">
+      <p class="section-num">03 · COCKING THE GRIP</p>
+      <p class="section-title">컨택이 약하다면?</p>
+      <p class="section-tag">코킹 유지 · 손목 릴리즈 타이밍</p>
+    </div>
+    <span class="chevron">▼</span>
+  </div>
+  <div class="section-body">
+    <div class="prep-box">
+      <p class="prep-title">준비 자세</p>
+      <div class="prep-item"><div class="prep-dot"></div><p class="prep-text">뒷손(오른손) 손목을 뒤로 꺾어서 고정 — 이 꺾인 각도가 코킹</p></div>
+      <div class="prep-item"><div class="prep-dot"></div><p class="prep-text">앞손(왼손)은 그립을 가볍게 잡고 리드하는 역할</p></div>
+      <div class="prep-item"><div class="prep-dot"></div><p class="prep-text">배트를 수직으로 세울수록 코킹 각도가 잘 만들어짐</p></div>
+      <div class="prep-item"><div class="prep-dot"></div><p class="prep-text">그립 압력은 60% 정도 — 너무 꽉 쥐면 손목이 안 꺾임</p></div>
+    </div>
+
+    <p class="step-title">STEP 1 · 코킹 유지하며 스윙 시작</p>
+    <div class="step-item"><span class="step-num">→</span><p class="step-text">골반 회전과 함께 손이 앞으로 나오기 시작</p></div>
+    <div class="step-item"><span class="step-num">→</span><p class="step-text">손목 꺾인 각도는 그대로 유지 — 배트 헤드가 뒤에 처진 채로 이동</p></div>
+    <div class="key-box">
+      <p class="key-title">핵심 포인트</p>
+      <div class="key-item"><div class="key-dot"></div><p class="key-text">스윙 시작과 동시에 손목이 풀리면 안 됨. 배트 스피드가 임팩트 전에 죽어버림</p></div>
+      <div class="key-item"><div class="key-dot"></div><p class="key-text">뒷손 엄지손톱이 위를 향하는 상태를 최대한 오래 유지한다고 생각하면 쉬움</p></div>
+    </div>
+
+    <p class="step-title">STEP 2 · 임팩트 직전까지 버티기</p>
+    <div class="step-item"><span class="step-num">→</span><p class="step-text">손이 볼 앞까지 이동하는 동안 코킹 각도 유지</p></div>
+    <div class="step-item"><span class="step-num">→</span><p class="step-text">볼 바로 앞 — 이 지점에서 손목을 한 번에 릴리즈</p></div>
+    <div class="key-box">
+      <p class="key-title">핵심 포인트</p>
+      <div class="key-item"><div class="key-dot"></div><p class="key-text">릴리즈 타이밍이 너무 이르면 배트 스피드 손실. 너무 늦으면 파울. 볼 바로 앞이 포인트</p></div>
+      <div class="key-item"><div class="key-dot"></div><p class="key-text">릴리즈할 때 억지로 손목을 꺾어치면 안 됨. 자연스럽게 터지는 느낌이어야 함</p></div>
+    </div>
+
+    <p class="step-title">STEP 3 · 임팩트 & 팔로우스루</p>
+    <div class="step-item"><span class="step-num">→</span><p class="step-text">손목 릴리즈와 함께 배트 헤드가 가속되며 볼과 만남</p></div>
+    <div class="step-item"><span class="step-num">→</span><p class="step-text">배트가 어깨 위까지 올라오며 마무리</p></div>
+    <div class="key-box">
+      <p class="key-title">핵심 포인트</p>
+      <div class="key-item"><div class="key-dot"></div><p class="key-text">타구 소리가 크고 탁 하면 코킹이 잘 유지된 것. 약한 소리면 손목이 일찍 풀린 것</p></div>
+    </div>
+
+    <div class="practice-box">
+      <p class="practice-title">처음 연습 순서</p>
+      <div class="practice-item"><span class="practice-num">1.</span><p class="practice-text">배트 없이 — 뒷손 손목 꺾은 상태로 슬로우 스윙, 손목이 언제 풀리는지 느끼기 10회</p></div>
+      <div class="practice-item"><span class="practice-num">2.</span><p class="practice-text">슬로우 모션으로 배트 들고 — 임팩트 직전까지 코킹 유지되는지 확인 10회</p></div>
+      <div class="practice-item"><span class="practice-num">3.</span><p class="practice-text">티배팅 — 타구 소리로 확인. 크고 탁하면 성공, 약하면 손목 일찍 풀린 것</p></div>
+      <p style="font-size:11px;color:var(--text3);margin-top:10px;">처음엔 의도적으로 느리게. 빠르게 하면 결국 다시 원래대로 돌아옴.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleSection(header) {
+  const body = header.nextElementSibling;
+  const chev = header.querySelector('.chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open');
+  chev.classList.toggle('open');
+  header.classList.toggle('open');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>전체 일정 · 학균</title>
+<style>
+:root {
+  --bg: #0f0f0f;
+  --bg2: #1a1a1a;
+  --bg3: #242424;
+  --border: #2e2e2e;
+  --text: #f0f0f0;
+  --text2: #aaa;
+  --text3: #555;
+  --mint: #3DD6A3;
+  --pink: #FF4F7B;
+  --yellow: #FFD600;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 48px 20px 40px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.back { font-size: 11px; color: var(--text3); margin-bottom: 12px; display: block; text-decoration: none; }
+.back:hover { color: var(--text2); }
+.title-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.title { font-size: 22px; font-weight: 500; color: var(--text); }
+.dots { display: flex; gap: 3px; }
+.dot { width: 6px; height: 6px; border-radius: 50%; }
+.dot-mint { background: var(--mint); }
+.dot-pink { background: var(--pink); }
+.dot-yellow { background: var(--yellow); }
+.gradient-bar { height: 2px; background: linear-gradient(90deg, var(--mint), var(--pink), var(--yellow)); border-radius: 2px; margin-bottom: 20px; }
+
+.month-label { font-size: 10px; color: var(--text3); letter-spacing: 0.08em; margin: 16px 0 8px; }
+.month-label:first-of-type { margin-top: 0; }
+
+.game-row {
+  background: var(--bg2);
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+  padding: 13px 16px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.game-row.upcoming { border-color: var(--border); }
+.game-row.next-game { border-color: rgba(255,79,123,0.4); }
+.game-row.done { opacity: 0.45; }
+.game-row.participated { opacity: 1; }
+
+.row-left { }
+.row-date { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.row-opponent { font-size: 12px; color: var(--text3); }
+
+.row-right { text-align: right; }
+.row-time { font-size: 12px; color: var(--text2); margin-bottom: 3px; }
+.row-venue { font-size: 11px; color: var(--text3); }
+
+.badge { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; margin-left: 6px; }
+.badge-home { background: rgba(61,214,163,0.12); color: var(--mint); border: 0.5px solid rgba(61,214,163,0.3); }
+.badge-away { background: rgba(170,170,170,0.1); color: var(--text3); border: 0.5px solid rgba(170,170,170,0.2); }
+.badge-next { background: rgba(255,79,123,0.15); color: var(--pink); border: 0.5px solid rgba(255,79,123,0.3); }
+.badge-participated { background: rgba(61,214,163,0.1); color: var(--mint); border: 0.5px solid rgba(61,214,163,0.2); }
+
+.dday { font-size: 12px; font-weight: 500; color: var(--pink); }
+</style>
+</head>
+<body>
+
+<a class="back" href="index.html">← 허브로 돌아가기</a>
+<div class="title-row">
+  <h1 class="title">전체 일정</h1>
+  <div class="dots">
+    <div class="dot dot-mint"></div>
+    <div class="dot dot-pink"></div>
+    <div class="dot dot-yellow"></div>
+  </div>
+</div>
+<div class="gradient-bar"></div>
+
+<div id="schedule-list"></div>
+
+<script>
+const MY_TEAM = '라이징스타';
+
+async function loadJSON(path) {
+  const res = await fetch(path);
+  return res.json();
+}
+
+function formatTime(t) {
+  const [h, m] = t.split(':');
+  const hour = parseInt(h);
+  return `${hour < 12 ? '오전' : '오후'} ${hour <= 12 ? hour : hour - 12}시${m !== '00' ? ' ' + m + '분' : ''}`;
+}
+
+function getDday(dateStr) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const target = new Date(dateStr + 'T00:00:00'); target.setHours(0,0,0,0);
+  return Math.round((target - today) / 86400000);
+}
+
+function formatDate(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  const days = ['일','월','화','수','목','금','토'];
+  return `${d.getMonth()+1}.${String(d.getDate()).padStart(2,'0')} (${days[d.getDay()]})`;
+}
+
+function getMonth(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  return `${d.getFullYear()}년 ${d.getMonth()+1}월`;
+}
+
+async function init() {
+  const [schedule, games] = await Promise.all([
+    loadJSON('data/schedule.json'),
+    loadJSON('data/games.json'),
+  ]);
+
+  const gameDates = new Set(games.map(g => g.date));
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  // 다음 경기 찾기
+  const nextGame = schedule
+    .filter(g => g.status === 'upcoming')
+    .sort((a,b) => a.date.localeCompare(b.date))[0];
+
+  // 월별로 그룹
+  const months = {};
+  schedule.forEach(g => {
+    const m = getMonth(g.date);
+    if (!months[m]) months[m] = [];
+    months[m].push(g);
+  });
+
+  let html = '';
+  for (const [month, games_] of Object.entries(months)) {
+    html += `<p class="month-label">${month}</p>`;
+    games_.forEach(g => {
+      const isHome = g.home === MY_TEAM;
+      const opponent = isHome ? g.away : g.home;
+      const isNext = nextGame && g.date === nextGame.date;
+      const isParticipated = gameDates.has(g.date) && g.status === 'done';
+      const isDone = g.status === 'done';
+      const dday = getDday(g.date);
+
+      let rowClass = 'game-row';
+      if (isNext) rowClass += ' next-game';
+      else if (isParticipated) rowClass += ' participated';
+      else if (isDone) rowClass += ' done';
+      else rowClass += ' upcoming';
+
+      const homeBadge = isHome
+        ? '<span class="badge badge-home">홈</span>'
+        : '<span class="badge badge-away">원정</span>';
+
+      const rightContent = isNext
+        ? `<div class="dday">D-${dday}</div><div class="row-venue">${g.venue}</div>`
+        : isDone
+          ? `<div class="row-time">${isParticipated ? '<span class="badge badge-participated">등판</span>' : '불참'}</div><div class="row-venue">${g.venue}</div>`
+          : `<div class="row-time">${formatTime(g.time)}</div><div class="row-venue">${g.venue}</div>`;
+
+      html += `
+        <div class="${rowClass}">
+          <div class="row-left">
+            <div class="row-date">${formatDate(g.date)} ${isNext ? '<span class="badge badge-next">다음 경기</span>' : ''}</div>
+            <div class="row-opponent">vs ${opponent} ${homeBadge}</div>
+          </div>
+          <div class="row-right">${rightContent}</div>
+        </div>
+      `;
+    });
+  }
+
+  document.getElementById('schedule-list').innerHTML = html;
+}
+
+init();
+</script>
+</body>
+</html>

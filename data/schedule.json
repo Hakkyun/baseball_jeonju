@@ -1,0 +1,23 @@
+[
+  { "date": "2026-03-22", "time": "12:00", "venue": "효자구장", "home": "라이징스타", "away": "불독스", "status": "done" },
+  { "date": "2026-03-29", "time": "12:00", "venue": "효자구장", "home": "라이징스타", "away": "스나이퍼스", "status": "done" },
+  { "date": "2026-04-05", "time": "12:00", "venue": "효자구장", "home": "라이징스타", "away": "지니어스", "status": "done" },
+  { "date": "2026-04-12", "time": "12:00", "venue": "효자구장", "home": "라이징스타", "away": "임팩트", "status": "done" },
+  { "date": "2026-04-19", "time": "16:00", "venue": "효자구장", "home": "연금이", "away": "라이징스타", "status": "done" },
+  { "date": "2026-04-26", "time": "12:00", "venue": "솔내구장", "home": "승승장구 락", "away": "라이징스타", "status": "upcoming" },
+  { "date": "2026-05-03", "time": "09:00", "venue": "진안구장", "home": "미소렌터카", "away": "라이징스타", "status": "upcoming" },
+  { "date": "2026-05-10", "time": "08:00", "venue": "효자구장", "home": "라이징스타", "away": "불독스", "status": "upcoming" },
+  { "date": "2026-05-17", "time": "08:00", "venue": "필연구장", "home": "스나이퍼스", "away": "라이징스타", "status": "upcoming" },
+  { "date": "2026-05-24", "time": "10:00", "venue": "솔내구장", "home": "지니어스", "away": "라이징스타", "status": "upcoming" },
+  { "date": "2026-05-31", "time": "12:00", "venue": "필연구장", "home": "임팩트", "away": "라이징스타", "status": "upcoming" },
+  { "date": "2026-06-07", "time": "16:00", "venue": "효자구장", "home": "라이징스타", "away": "연금이", "status": "upcoming" },
+  { "date": "2026-06-14", "time": "14:00", "venue": "솔내구장", "home": "라이징스타", "away": "승승장구 락", "status": "upcoming" },
+  { "date": "2026-06-21", "time": "14:00", "venue": "솔내구장", "home": "라이징스타", "away": "미소렌터카", "status": "upcoming" },
+  { "date": "2026-06-28", "time": "08:00", "venue": "솔내구장", "home": "불독스", "away": "라이징스타", "status": "upcoming" },
+  { "date": "2026-07-05", "time": "10:00", "venue": "효자구장", "home": "라이징스타", "away": "스나이퍼스", "status": "upcoming" },
+  { "date": "2026-07-12", "time": "08:00", "venue": "필연구장", "home": "라이징스타", "away": "지니어스", "status": "upcoming" },
+  { "date": "2026-07-19", "time": "14:00", "venue": "솔내구장", "home": "라이징스타", "away": "임팩트", "status": "upcoming" },
+  { "date": "2026-07-26", "time": "16:00", "venue": "효자구장", "home": "연금이", "away": "라이징스타", "status": "upcoming" },
+  { "date": "2026-08-23", "time": "08:00", "venue": "효자구장", "home": "승승장구 락", "away": "라이징스타", "status": "upcoming" },
+  { "date": "2026-09-06", "time": "14:00", "venue": "솔내구장", "home": "미소렌터카", "away": "라이징스타", "status": "upcoming" }
+]

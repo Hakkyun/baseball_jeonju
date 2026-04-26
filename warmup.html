@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>학균 선발 워밍업 루틴</title>
+<style>
+:root {
+  --bg: #0f0f0f; --bg2: #1a1a1a; --bg3: #242424; --border: #2e2e2e;
+  --text: #f0f0f0; --text2: #aaa; --text3: #555;
+  --mint: #3DD6A3; --pink: #FF4F7B; --yellow: #FFD600; --white: #ffffff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; background: var(--bg); color: var(--text); padding: 48px 20px 40px; }
+.wrap { max-width: 480px; margin: 0 auto; }
+
+.back { font-size: 11px; color: var(--text3); margin-bottom: 12px; display: block; text-decoration: none; }
+.back:hover { color: var(--text2); }
+.header { margin-bottom: 20px; }
+.header-top { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+h1 { font-size: 18px; font-weight: 500; color: var(--white); }
+.logo-dot { display: flex; gap: 4px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; }
+.dot-mint { background: var(--mint); } .dot-pink { background: var(--pink); } .dot-yellow { background: var(--yellow); }
+.subtitle { font-size: 12px; color: var(--text3); }
+.accent-bar { height: 2px; background: linear-gradient(90deg, var(--mint), var(--pink), var(--yellow)); border-radius: 2px; margin-bottom: 28px; }
+
+.tab-row { display: flex; gap: 6px; margin-bottom: 24px; }
+.tab-btn { flex: 1; padding: 10px 8px; border-radius: 20px; border: 0.5px solid var(--border); background: var(--bg2); color: var(--text3); font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.15s; text-align: center; }
+.tab-btn.active { background: var(--mint); color: #000; border-color: var(--mint); }
+.tab-content { display: none; } .tab-content.active { display: block; }
+
+.section-title { font-size: 11px; font-weight: 500; color: var(--text3); letter-spacing: 0.1em; margin-bottom: 12px; text-transform: uppercase; }
+
+.timeline { position: relative; margin-bottom: 32px; }
+.timeline::before { content: ''; position: absolute; left: 28px; top: 0; bottom: 0; width: 1px; background: var(--border); }
+.tl-item { display: flex; gap: 12px; margin-bottom: 8px; }
+.tl-time { width: 28px; text-align: right; font-size: 11px; color: var(--text3); padding-top: 12px; flex-shrink: 0; }
+.tl-dot-wrap { display: flex; align-items: flex-start; width: 16px; flex-shrink: 0; padding-top: 14px; position: relative; z-index: 1; }
+.tl-dot { width: 10px; height: 10px; border-radius: 50%; }
+.tl-card { flex: 1; background: var(--bg2); border: 0.5px solid var(--border); border-radius: 10px; padding: 10px 14px; }
+.tl-card.c-mint { border-color: rgba(61,214,163,0.3); }
+.tl-card.c-pink { border-color: rgba(255,79,123,0.3); }
+.tl-card.c-yellow { border-color: rgba(255,214,0,0.3); }
+.tl-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.tl-sub { font-size: 11px; color: var(--text2); line-height: 1.7; }
+
+.tl-badge { display: inline-block; font-size: 10px; font-weight: 600; padding: 1px 8px; border-radius: 10px; margin-right: 4px; margin-bottom: 4px; }
+.tl-badge[data-target] { cursor: pointer; text-decoration: underline dotted; text-underline-offset: 2px; transition: opacity 0.15s; }
+.tl-badge[data-target]:hover { opacity: 0.7; }
+.b-mint { background: rgba(61,214,163,0.15); color: var(--mint); border: 0.5px solid rgba(61,214,163,0.3); }
+.b-pink { background: rgba(255,79,123,0.15); color: var(--pink); border: 0.5px solid rgba(255,79,123,0.3); }
+.b-yellow { background: rgba(255,214,0,0.15); color: var(--yellow); border: 0.5px solid rgba(255,214,0,0.3); }
+.b-gray { background: rgba(170,170,170,0.1); color: var(--text2); border: 0.5px solid rgba(170,170,170,0.2); }
+
+.note-box { background: var(--bg2); border: 0.5px solid rgba(255,214,0,0.3); border-radius: 10px; padding: 14px 16px; margin-bottom: 32px; }
+.note-title { font-size: 11px; font-weight: 500; color: var(--yellow); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
+.note-list { list-style: none; }
+.note-list li { font-size: 12px; color: var(--text2); line-height: 1.9; display: flex; gap: 8px; }
+.note-list li::before { content: '—'; color: var(--yellow); flex-shrink: 0; }
+
+.detail-group { margin-bottom: 24px; }
+.detail-group-title { font-size: 12px; font-weight: 600; color: var(--mint); margin-bottom: 10px; letter-spacing: 0.05em; }
+.detail-card { background: var(--bg2); border: 0.5px solid var(--border); border-radius: 10px; margin-bottom: 6px; overflow: hidden; transition: border-color 0.3s; }
+.detail-card.highlight { border-color: var(--mint); }
+.detail-header { display: flex; align-items: center; justify-content: space-between; padding: 11px 14px; cursor: pointer; user-select: none; }
+.detail-header:hover { background: var(--bg3); }
+.detail-name { font-size: 13px; font-weight: 500; color: var(--text); }
+.detail-chevron { font-size: 9px; color: var(--text3); transition: transform 0.2s; }
+.detail-chevron.open { transform: rotate(180deg); }
+.detail-body { display: none; padding: 0 14px 14px; border-top: 0.5px solid var(--border); }
+.detail-body.open { display: block; }
+.detail-body p { font-size: 12px; color: var(--text2); line-height: 1.9; margin-top: 10px; }
+.detail-body .step { display: flex; gap: 8px; font-size: 12px; color: var(--text2); line-height: 1.8; margin-top: 6px; }
+.detail-body .step-num { color: var(--mint); font-weight: 600; min-width: 16px; flex-shrink: 0; }
+.detail-body .tip { font-size: 11px; color: var(--text3); margin-top: 8px; }
+.media-slot { margin-top: 10px; background: var(--bg3); border: 0.5px dashed var(--border); border-radius: 8px; padding: 10px 14px; font-size: 11px; color: var(--text3); text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">← 허브로 돌아가기</a>
+  <div class="header">
+    <div class="header-top">
+      <h1>선발 워밍업 루틴</h1>
+      <div class="logo-dot">
+        <div class="dot dot-mint"></div><div class="dot dot-pink"></div><div class="dot dot-yellow"></div>
+      </div>
+    </div>
+    <p class="subtitle">변학균 (41) · 전주 라이징스타 · 사이드암 선발 기준</p>
+  </div>
+  <div class="accent-bar"></div>
+
+  <div class="tab-row">
+    <button class="tab-btn active" onclick="switchTab('full', this)">정규 루틴 (50분)</button>
+    <button class="tab-btn" onclick="switchTab('short', this)">약식 루틴 (20~30분)</button>
+    <button class="tab-btn" onclick="switchTab('detail', this)">동작 상세</button>
+  </div>
+
+  <!-- ===== 정규 루틴 ===== -->
+  <div class="tab-content active" id="tab-full">
+    <div class="section-title">타임라인 · 배지 누르면 동작 설명으로 이동</div>
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-time">0'</div>
+        <div class="tl-dot-wrap"><div class="tl-dot" style="background:var(--text3)"></div></div>
+        <div class="tl-card">
+          <div class="tl-title">🏃 조깅 <span style="font-size:11px;color:var(--text3);font-weight:400;">2분</span></div>
+          <div class="tl-sub">그라운드 한 바퀴 · 땀 살짝 날 정도 · 숨 안 차는 강도</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">2'</div>
+        <div class="tl-dot-wrap"><div class="tl-dot" style="background:var(--mint)"></div></div>
+        <div class="tl-card c-mint">
+          <div class="tl-title">🔄 동적 스트레칭 <span style="font-size:11px;color:var(--text3);font-weight:400;">5분</span></div>
+          <div class="tl-sub" style="margin-bottom:6px;">몸 온도 올리기 · 관절 가동범위 확보</div>
+          <span class="tl-badge b-mint" data-target="detail-레그스윙">레그스윙 앞뒤</span>
+          <span class="tl-badge b-mint" data-target="detail-레그스윙">레그스윙 옆</span>
+          <span class="tl-badge b-mint" data-target="detail-힙서클">힙서클</span>
+          <span class="tl-badge b-mint" data-target="detail-골반8자">골반 8자</span>
+          <span class="tl-badge b-mint" data-target="detail-워킹런지">워킹런지</span>
+          <span class="tl-badge b-mint" data-target="detail-인치웜">인치웜</span>
+          <span class="tl-badge b-mint" data-target="detail-암서클">암서클</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">7'</div>
+        <div class="tl-dot-wrap"><div class="tl-dot" style="background:var(--yellow)"></div></div>
+        <div class="tl-card c-yellow">
+          <div class="tl-title">🧘 정적 스트레칭 <span style="font-size:11px;color:var(--text3);font-weight:400;">10분</span></div>
+          <div class="tl-sub" style="margin-bottom:6px;">각 동작 20~30초 유지 · 고관절/어깨 위주</div>
+          <span class="tl-badge b-yellow" data-target="detail-피전포즈">피전포즈</span>
+          <span class="tl-badge b-yellow" data-target="detail-4자">4자 스트레칭</span>
+          <span class="tl-badge b-yellow" data-target="detail-무릎가슴">무릎 가슴 당기기</span>
+          <span class="tl-badge b-yellow" data-target="detail-크로스바디">크로스바디</span>
+          <span class="tl-badge b-yellow" data-target="detail-슬리퍼">슬리퍼 스트레칭</span>
+          <span class="tl-badge b-yellow" data-target="detail-햄스트링">햄스트링</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">17'</div>
+        <div class="tl-dot-wrap"><div class="tl-dot" style="background:var(--pink)"></div></div>
+        <div class="tl-card c-pink">
+          <div class="tl-title">⚡ 활성화 <span style="font-size:11px;color:var(--text3);font-weight:400;">5분</span></div>
+          <div class="tl-sub" style="margin-bottom:6px;">근육 점화 · Y→W→T→L 각 15회</div>
+          <span class="tl-badge b-pink" data-target="detail-브릿지">브릿지 15회×2세트</span>
+          <span class="tl-badge b-pink" data-target="detail-재거밴드">Y 15회</span>
+          <span class="tl-badge b-pink" data-target="detail-재거밴드">W 15회</span>
+          <span class="tl-badge b-pink" data-target="detail-재거밴드">T 15회</span>
+          <span class="tl-badge b-pink" data-target="detail-재거밴드">L 15회</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">22'</div>
+        <div class="tl-dot-wrap"><div class="tl-dot" style="background:var(--mint)"></div></div>
+        <div class="tl-card c-mint">
+          <div class="tl-title">⚾ 캐치볼 <span style="font-size:11px;color:var(--text3);font-weight:400;">10분</span></div>
+          <div class="tl-sub">10m → 20m → 30m → 20m → 10m · 단계적으로 늘렸다가 복귀</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">32'</div>
+        <div class="tl-dot-wrap"><div class="tl-dot" style="background:var(--pink)"></div></div>
+        <div class="tl-card c-pink">
+          <div class="tl-title">🔥 불펜 피칭 <span style="font-size:11px;color:var(--text3);font-weight:400;">~50분</span></div>
+          <div class="tl-sub" style="margin-bottom:6px;">강도 7~80% · 최대 20구 또는 15분</div>
+          <div class="tl-sub">종료 기준 — 구종별 <strong style="color:var(--pink)">2구 연속 원하는 코스</strong> 성공 시 해당 구종 종료</div>
+          <div style="margin-top:6px;">
+            <span class="tl-badge b-pink">직구</span>
+            <span class="tl-badge b-gray">너클커브</span>
+            <span class="tl-badge b-gray">체인지업</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="note-box">
+      <div class="note-title">⚡ 불펜 후 등판 전 — 어깨 식지 않게</div>
+      <ul class="note-list">
+        <li>암서클 — 작게, 계속 돌리기 (앉지 말고 서서)</li>
+        <li>빈 손 투구 폼 2~3회 — 릴리즈 포인트 이미지 유지</li>
+        <li>재거밴드 가볍게 Y→W 1세트씩</li>
+        <li>절대 앉지 말 것 — 체온 유지가 핵심</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== 약식 루틴 ===== -->
+  <div class="tab-content" id="tab-short">
+    <div class="section-title">약식 타임라인 · 늦었을 때 최소한</div>
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-time">0'</div>
+        <div class="tl-dot-wrap"><div class="tl-dot" style="background:var(--text3)"></div></div>
+        <div class="tl-card">
+          <div class="tl-title">🏃 조깅 <span style="font-size:11px;color:var(--text3);font-weight:400;">2분</span></div>
+          <div class="tl-sub">그라운드 한 바퀴 · 최대한 빠르게 몸 온도 올리기</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">2'</div>
+        <div class="tl-dot-wrap"><div class="tl-dot" style="background:var(--mint)"></div></div>
+        <div class="tl-card c-mint">
+          <div class="tl-title">🔄 동적 스트레칭 <span style="font-size:11px;color:var(--text3);font-weight:400;">4분</span></div>
+          <div class="tl-sub" style="margin-bottom:6px;">핵심만</div>
+          <span class="tl-badge b-mint" data-target="detail-레그스윙">레그스윙 앞뒤/옆</span>
+          <span class="tl-badge b-mint" data-target="detail-힙서클">힙서클</span>
+          <span class="tl-badge b-mint" data-target="detail-암서클">암서클</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">6'</div>
+        <div class="tl-dot-wrap"><div class="tl-dot" style="background:var(--yellow)"></div></div>
+        <div class="tl-card c-yellow">
+          <div class="tl-title">🧘 정적 스트레칭 <span style="font-size:11px;color:var(--text3);font-weight:400;">4분</span></div>
+          <div class="tl-sub" style="margin-bottom:6px;">핵심만 · 각 15~20초</div>
+          <span class="tl-badge b-yellow" data-target="detail-피전포즈">피전포즈</span>
+          <span class="tl-badge b-yellow" data-target="detail-4자">4자 스트레칭</span>
+          <span class="tl-badge b-yellow" data-target="detail-크로스바디">크로스바디</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">10'</div>
+        <div class="tl-dot-wrap"><div class="tl-dot" style="background:var(--pink)"></div></div>
+        <div class="tl-card c-pink">
+          <div class="tl-title">⚡ 재거밴드 <span style="font-size:11px;color:var(--text3);font-weight:400;">2분</span></div>
+          <div class="tl-sub" style="margin-bottom:6px;">Y→W→T→L 각 10회</div>
+          <span class="tl-badge b-pink" data-target="detail-재거밴드">Y 10회</span>
+          <span class="tl-badge b-pink" data-target="detail-재거밴드">W 10회</span>
+          <span class="tl-badge b-pink" data-target="detail-재거밴드">T 10회</span>
+          <span class="tl-badge b-pink" data-target="detail-재거밴드">L 10회</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">12'</div>
+        <div class="tl-dot-wrap"><div class="tl-dot" style="background:var(--mint)"></div></div>
+        <div class="tl-card c-mint">
+          <div class="tl-title">⚾ 캐치볼 <span style="font-size:11px;color:var(--text3);font-weight:400;">8분</span></div>
+          <div class="tl-sub">10m → 20m → 30m → 20m → 10m</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">20'</div>
+        <div class="tl-dot-wrap"><div class="tl-dot" style="background:var(--pink)"></div></div>
+        <div class="tl-card c-pink">
+          <div class="tl-title">🔥 불펜 피칭 <span style="font-size:11px;color:var(--text3);font-weight:400;">~30분</span></div>
+          <div class="tl-sub">강도 7~80% · 최대 15구 또는 10분 · 구종별 2구 연속 성공 시 종료</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="note-box">
+      <div class="note-title">⚡ 불펜 후 등판 전 — 어깨 식지 않게</div>
+      <ul class="note-list">
+        <li>암서클 — 작게, 계속 돌리기 (앉지 말고 서서)</li>
+        <li>빈 손 투구 폼 2~3회 — 릴리즈 포인트 이미지 유지</li>
+        <li>재거밴드 가볍게 Y→W 1세트씩</li>
+        <li>절대 앉지 말 것 — 체온 유지가 핵심</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== 동작 상세 ===== -->
+  <div class="tab-content" id="tab-detail">
+
+    <div class="detail-group">
+      <div class="detail-group-title">— 동적 스트레칭</div>
+
+      <div class="detail-card" id="detail-레그스윙">
+        <div class="detail-header" onclick="toggleDetail(this)">
+          <span class="detail-name">레그스윙 (앞뒤 / 옆)</span>
+          <span class="detail-chevron">▼</span>
+        </div>
+        <div class="detail-body">
+          <div class="step"><span class="step-num">1.</span><span>한 손으로 벽이나 펜스를 짚어 균형 잡기</span></div>
+          <div class="step"><span class="step-num">2.</span><span>한쪽 다리를 자연스럽게 앞뒤로 흔들기 — 힘 빼고, 진자 운동처럼</span></div>
+          <div class="step"><span class="step-num">3.</span><span>앞뒤 10회 후 같은 자세로 좌우로 10회</span></div>
+          <div class="step"><span class="step-num">4.</span><span>반대 다리 반복</span></div>
+          <p class="tip">⚑ 발을 억지로 높이 올리지 않아도 됨. 자연스럽게 흔드는 게 포인트.</p>
+          <div class="media-slot">📎 영상/이미지 링크 추가 가능</div>
+        </div>
+      </div>
+
+      <div class="detail-card" id="detail-힙서클">
+        <div class="detail-header" onclick="toggleDetail(this)">
+          <span class="detail-name">힙서클</span>
+          <span class="detail-chevron">▼</span>
+        </div>
+        <div class="detail-body">
+          <div class="step"><span class="step-num">1.</span><span>발을 어깨너비로 벌리고 서서 손을 허리에 올리기</span></div>
+          <div class="step"><span class="step-num">2.</span><span>골반을 크게 원을 그리듯 천천히 돌리기</span></div>
+          <div class="step"><span class="step-num">3.</span><span>시계 방향 10회 → 반시계 방향 10회</span></div>
+          <p class="tip">⚑ 상체는 최대한 고정하고 골반만 움직이는 게 핵심.</p>
+          <div class="media-slot">📎 영상/이미지 링크 추가 가능</div>
+        </div>
+      </div>
+
+      <div class="detail-card" id="detail-골반8자">
+        <div class="detail-header" onclick="toggleDetail(this)">
+          <span class="detail-name">골반 8자 돌리기 (박종훈식)</span>
+          <span class="detail-chevron">▼</span>
+        </div>
+        <div class="detail-body">
+          <div class="step"><span class="step-num">1.</span><span>다리를 어깨너비보다 넓게 벌리고 무릎을 살짝 구부리기</span></div>
+          <div class="step"><span class="step-num">2.</span><span>무릎과 골반을 연동해서 8자를 그리듯 돌리기</span></div>
+          <div class="step"><span class="step-num">3.</span><span>좌우 번갈아 부드럽게 · 10~15회</span></div>
+          <p class="tip">⚑ 사이드암 투수 필수 — 투구 시 골반 회전 가동범위 확보.</p>
+          <div class="media-slot">📎 영상/이미지 링크 추가 가능</div>
+        </div>
+      </div>
+
+      <div class="detail-card" id="detail-워킹런지">
+        <div class="detail-header" onclick="toggleDetail(this)">
+          <span class="detail-name">워킹런지</span>
+          <span class="detail-chevron">▼</span>
+        </div>
+        <div class="detail-body">
+          <div class="step"><span class="step-num">1.</span><span>서있는 상태에서 한 발을 크게 앞으로 내딛기</span></div>
+          <div class="step"><span class="step-num">2.</span><span>앞 무릎이 90도, 뒷 무릎이 바닥 가까이 내려오게</span></div>
+          <div class="step"><span class="step-num">3.</span><span>앞 발로 밀어내며 일어서고 반대발로 앞으로 이동 · 10보</span></div>
+          <p class="tip">⚑ 왼 무릎 지끈거릴 때는 깊이 줄이거나 제자리 런지로 대체.</p>
+          <div class="media-slot">📎 영상/이미지 링크 추가 가능</div>
+        </div>
+      </div>
+
+      <div class="detail-card" id="detail-인치웜">
+        <div class="detail-header" onclick="toggleDetail(this)">
+          <span class="detail-name">인치웜</span>
+          <span class="detail-chevron">▼</span>
+        </div>
+        <div class="detail-body">
+          <div class="step"><span class="step-num">1.</span><span>서서 무릎을 최대한 펴고 손을 바닥에 짚기</span></div>
+          <div class="step"><span class="step-num">2.</span><span>손을 앞으로 걸어 플랭크 자세까지 이동</span></div>
+          <div class="step"><span class="step-num">3.</span><span>잠깐 유지 후 발을 손 쪽으로 걸어 돌아오기</span></div>
+          <div class="step"><span class="step-num">4.</span><span>일어서며 1회 완료 · 5회 반복</span></div>
+          <p class="tip">⚑ 햄스트링 + 코어 + 어깨 동시에 풀리는 효율 최고 동작.</p>
+          <div class="media-slot">📎 영상/이미지 링크 추가 가능</div>
+        </div>
+      </div>
+
+      <div class="detail-card" id="detail-암서클">
+        <div class="detail-header" onclick="toggleDetail(this)">
+          <span class="detail-name">암서클</span>
+          <span class="detail-chevron">▼</span>
+        </div>
+        <div class="detail-body">
+          <div class="step"><span class="step-num">1.</span><span>양팔을 옆으로 쭉 펴기</span></div>
+          <div class="step"><span class="step-num">2.</span><span>작은 원 → 큰 원 순서로 앞으로 10회</span></div>
+          <div class="step"><span class="step-num">3.</span><span>방향 바꿔 뒤로 10회</span></div>
+          <p class="tip">⚑ 어깨 관절 가동범위 확보 · 재거밴드 전 필수.</p>
+          <div class="media-slot">📎 영상/이미지 링크 추가 가능</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-group">
+      <div class="detail-group-title">— 정적 스트레칭</div>
+
+      <div class="detail-card" id="detail-피전포즈">
+        <div class="detail-header" onclick="toggleDetail(this)">
+          <span class="detail-name">피전포즈 (고관절)</span>
+          <span class="detail-chevron">▼</span>
+        </div>
+        <div class="detail-body">
+          <div class="step"><span class="step-num">1.</span><span>네발기기 자세에서 한쪽 무릎을 앞으로 가져와 바닥에 비스듬히 놓기</span></div>
+          <div class="step"><span class="step-num">2.</span><span>뒷다리는 뒤로 쭉 뻗기</span></div>
+          <div class="step"><span class="step-num">3.</span><span>상체를 앞으로 숙여 고관절 앞쪽을 늘려주기 · 30초 유지</span></div>
+          <div class="step"><span class="step-num">4.</span><span>반대쪽 반복</span></div>
+          <p class="tip">⚑ 사이드암 투구 시 고관절 회전이 핵심 — 이 동작이 가장 중요.</p>
+          <div class="media-slot">📎 영상/이미지 링크 추가 가능</div>
+        </div>
+      </div>
+
+      <div class="detail-card" id="detail-4자">
+        <div class="detail-header" onclick="toggleDetail(this)">
+          <span class="detail-name">4자 스트레칭 (이상근)</span>
+          <span class="detail-chevron">▼</span>
+        </div>
+        <div class="detail-body">
+          <div class="step"><span class="step-num">1.</span><span>바르게 누워 한쪽 무릎을 세우기</span></div>
+          <div class="step"><span class="step-num">2.</span><span>반대쪽 발목을 세운 무릎 위에 올려 숫자 4 모양 만들기</span></div>
+          <div class="step"><span class="step-num">3.</span><span>세운 다리 허벅지 뒤를 양손으로 잡아 가슴 쪽으로 지그시 당기기 · 30초</span></div>
+          <div class="step"><span class="step-num">4.</span><span>반대쪽 반복</span></div>
+          <div class="media-slot">📎 영상/이미지 링크 추가 가능</div>
+        </div>
+      </div>
+
+      <div class="detail-card" id="detail-무릎가슴">
+        <div class="detail-header" onclick="toggleDetail(this)">
+          <span class="detail-name">무릎 가슴으로 당기기</span>
+          <span class="detail-chevron">▼</span>
+        </div>
+        <div class="detail-body">
+          <div class="step"><span class="step-num">1.</span><span>바르게 누워 양 무릎을 굽히기</span></div>
+          <div class="step"><span class="step-num">2.</span><span>양손으로 무릎 아래를 감싸 가슴 쪽으로 안아당기기</span></div>
+          <div class="step"><span class="step-num">3.</span><span>허리가 바닥에 닿는 느낌 유지하며 30초</span></div>
+          <div class="media-slot">📎 영상/이미지 링크 추가 가능</div>
+        </div>
+      </div>
+
+      <div class="detail-card" id="detail-크로스바디">
+        <div class="detail-header" onclick="toggleDetail(this)">
+          <span class="detail-name">크로스바디 암 스트레칭 (어깨)</span>
+          <span class="detail-chevron">▼</span>
+        </div>
+        <div class="detail-body">
+          <div class="step"><span class="step-num">1.</span><span>한쪽 팔을 가슴 앞으로 쭉 뻗기</span></div>
+          <div class="step"><span class="step-num">2.</span><span>반대팔로 팔꿈치 아래를 받쳐 몸 쪽으로 지그시 당기기</span></div>
+          <div class="step"><span class="step-num">3.</span><span>어깨 뒤쪽이 당기는 느낌 · 20~30초</span></div>
+          <div class="step"><span class="step-num">4.</span><span>반대쪽 반복</span></div>
+          <div class="media-slot">📎 영상/이미지 링크 추가 가능</div>
+        </div>
+      </div>
+
+      <div class="detail-card" id="detail-슬리퍼">
+        <div class="detail-header" onclick="toggleDetail(this)">
+          <span class="detail-name">슬리퍼 스트레칭 (후면 어깨)</span>
+          <span class="detail-chevron">▼</span>
+        </div>
+        <div class="detail-body">
+          <div class="step"><span class="step-num">1.</span><span>옆으로 누워 던지는 팔(오른팔)을 앞으로 뻗고 팔꿈치를 90도로 구부리기</span></div>
+          <div class="step"><span class="step-num">2.</span><span>반대 손으로 손목을 잡고 손등이 바닥 방향으로 지그시 누르기</span></div>
+          <div class="step"><span class="step-num">3.</span><span>어깨 후면 캡슐이 당기는 느낌 · 20~30초</span></div>
+          <p class="tip">⚑ 투수 어깨 내회전 가동범위 확보 — 부상 예방 필수 동작.</p>
+          <div class="media-slot">📎 영상/이미지 링크 추가 가능</div>
+        </div>
+      </div>
+
+      <div class="detail-card" id="detail-햄스트링">
+        <div class="detail-header" onclick="toggleDetail(this)">
+          <span class="detail-name">햄스트링 스트레칭</span>
+          <span class="detail-chevron">▼</span>
+        </div>
+        <div class="detail-body">
+          <div class="step"><span class="step-num">1.</span><span>바닥에 앉아 한 다리를 앞으로 뻗기</span></div>
+          <div class="step"><span class="step-num">2.</span><span>등을 펴고 상체를 뻗은 다리 방향으로 지그시 숙이기</span></div>
+          <div class="step"><span class="step-num">3.</span><span>허벅지 뒤쪽이 당기는 느낌 · 30초</span></div>
+          <div class="step"><span class="step-num">4.</span><span>반대쪽 반복</span></div>
+          <p class="tip">⚑ 사이드암은 햄스트링 부하가 커서 꼭 풀어줘야 함.</p>
+          <div class="media-slot">📎 영상/이미지 링크 추가 가능</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-group">
+      <div class="detail-group-title">— 활성화</div>
+
+      <div class="detail-card" id="detail-브릿지">
+        <div class="detail-header" onclick="toggleDetail(this)">
+          <span class="detail-name">브릿지</span>
+          <span class="detail-chevron">▼</span>
+        </div>
+        <div class="detail-body">
+          <div class="step"><span class="step-num">1.</span><span>무릎을 세우고 바르게 누워 발바닥을 바닥에 붙이기</span></div>
+          <div class="step"><span class="step-num">2.</span><span>발바닥으로 바닥을 밀며 엉덩이를 들어올리기</span></div>
+          <div class="step"><span class="step-num">3.</span><span>무릎부터 어깨까지 일직선 · 엉덩이 조이며 2초 유지</span></div>
+          <div class="step"><span class="step-num">4.</span><span>천천히 내려오기 · 15회 × 2세트</span></div>
+          <p class="tip">⚑ 둔근 활성화 — 사이드암 투구 파워 발생 지점.</p>
+          <div class="media-slot">📎 영상/이미지 링크 추가 가능</div>
+        </div>
+      </div>
+
+      <div class="detail-card" id="detail-재거밴드">
+        <div class="detail-header" onclick="toggleDetail(this)">
+          <span class="detail-name">재거밴드 — Y · W · T · L</span>
+          <span class="detail-chevron">▼</span>
+        </div>
+        <div class="detail-body">
+          <p style="margin-bottom:8px;">각 15회 · Y→W→T→L 순서로</p>
+          <div class="step"><span class="step-num">Y</span><span>밴드 잡고 양팔을 Y자 모양으로 머리 위 대각선 방향으로 올리기</span></div>
+          <div class="step"><span class="step-num">W</span><span>팔꿈치를 90도 구부려 W자로 — 팔꿈치를 뒤로 당기는 느낌</span></div>
+          <div class="step"><span class="step-num">T</span><span>양팔을 T자로 옆으로 쭉 펴서 올리기</span></div>
+          <div class="step"><span class="step-num">L</span><span>팔꿈치 90도 구부린 상태에서 외회전 — 손이 위로 올라오게</span></div>
+          <p class="tip">⚑ 회전근개 활성화 · 투구 전 어깨 준비의 핵심.</p>
+          <div class="media-slot">📎 영상/이미지 링크 추가 가능</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function toggleDetail(header) {
+  const body = header.nextElementSibling;
+  const chev = header.querySelector('.detail-chevron');
+  body.classList.toggle('open');
+  chev.classList.toggle('open');
+}
+
+function goToDetail(targetId) {
+  // 동작 상세 탭으로 전환
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-detail').classList.add('active');
+  document.querySelectorAll('.tab-btn')[2].classList.add('active');
+
+  const card = document.getElementById(targetId);
+  if (!card) return;
+
+  // 이전 하이라이트 제거
+  document.querySelectorAll('.detail-card.highlight').forEach(el => el.classList.remove('highlight'));
+
+  // 토글 열기
+  const body = card.querySelector('.detail-body');
+  const chev = card.querySelector('.detail-chevron');
+  body.classList.add('open');
+  chev.classList.add('open');
+
+  // 하이라이트 + 스크롤
+  card.classList.add('highlight');
+  setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
+  setTimeout(() => card.classList.remove('highlight'), 2000);
+}
+
+// 배지 클릭 이벤트 위임
+document.addEventListener('click', function(e) {
+  const badge = e.target.closest('.tl-badge[data-target]');
+  if (badge) goToDetail(badge.dataset.target);
+});
+</script>
+</body>
+</html>

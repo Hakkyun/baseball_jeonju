@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>연습 정보 · 학균</title>
+<style>
+:root {
+  --bg: #0f0f0f;
+  --bg2: #1a1a1a;
+  --bg3: #242424;
+  --border: #2e2e2e;
+  --text: #f0f0f0;
+  --text2: #aaa;
+  --text3: #555;
+  --mint: #3DD6A3;
+  --pink: #FF4F7B;
+  --yellow: #FFD600;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 48px 20px 40px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.back { font-size: 11px; color: var(--text3); margin-bottom: 12px; display: block; text-decoration: none; }
+.back:hover { color: var(--text2); }
+.title-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.title { font-size: 22px; font-weight: 500; color: var(--text); }
+.dots { display: flex; gap: 3px; }
+.dot { width: 6px; height: 6px; border-radius: 50%; }
+.dot-mint { background: var(--mint); }
+.dot-pink { background: var(--pink); }
+.dot-yellow { background: var(--yellow); }
+.gradient-bar { height: 2px; background: linear-gradient(90deg, var(--mint), var(--pink), var(--yellow)); border-radius: 2px; margin-bottom: 20px; }
+
+.category-label { font-size: 10px; color: var(--text3); letter-spacing: 0.08em; margin: 16px 0 8px; }
+.category-label:first-of-type { margin-top: 0; }
+
+.item-card {
+  background: var(--bg2);
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.item-card:hover { background: var(--bg3); }
+.item-card.available { border-color: rgba(255,79,123,0.3); }
+.item-card.soon { opacity: 0.4; cursor: default; }
+
+.item-left { }
+.item-name { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.item-desc { font-size: 11px; color: var(--text3); }
+.item-arrow { font-size: 13px; color: var(--text3); }
+.item-soon { font-size: 11px; color: var(--text3); }
+</style>
+</head>
+<body>
+
+<a class="back" href="index.html">← 허브로 돌아가기</a>
+<div class="title-row">
+  <h1 class="title">연습 정보</h1>
+  <div class="dots">
+    <div class="dot dot-mint"></div>
+    <div class="dot dot-pink"></div>
+    <div class="dot dot-yellow"></div>
+  </div>
+</div>
+<div class="gradient-bar"></div>
+
+<p class="category-label">타격</p>
+
+<a class="item-card available" href="batting.html">
+  <div class="item-left">
+    <p class="item-name">타격 기본기 3가지</p>
+    <p class="item-desc">Holding To Stride · Barrel · Cocking</p>
+  </div>
+  <span class="item-arrow">→</span>
+</a>
+
+<p class="category-label">투구</p>
+
+<div class="item-card soon">
+  <div class="item-left">
+    <p class="item-name">투구 메커니즘</p>
+    <p class="item-desc">준비중</p>
+  </div>
+  <span class="item-soon">곧 추가</span>
+</div>
+
+<p class="category-label">수비</p>
+
+<div class="item-card soon">
+  <div class="item-left">
+    <p class="item-name">수비 루틴</p>
+    <p class="item-desc">준비중</p>
+  </div>
+  <span class="item-soon">곧 추가</span>
+</div>
+
+</body>
+</html>

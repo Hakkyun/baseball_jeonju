@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>주간 루틴 · 학균</title>
+<style>
+:root {
+  --bg: #0f0f0f;
+  --bg2: #1a1a1a;
+  --bg3: #242424;
+  --border: #2e2e2e;
+  --text: #f0f0f0;
+  --text2: #aaa;
+  --text3: #555;
+  --mint: #3DD6A3;
+  --pink: #FF4F7B;
+  --yellow: #FFD600;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 48px 20px 40px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.back { font-size: 11px; color: var(--text3); margin-bottom: 12px; display: block; text-decoration: none; }
+.back:hover { color: var(--text2); }
+.title-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.title { font-size: 22px; font-weight: 500; color: var(--text); }
+.dots { display: flex; gap: 3px; }
+.dot { width: 6px; height: 6px; border-radius: 50%; }
+.dot-mint { background: var(--mint); }
+.dot-pink { background: var(--pink); }
+.dot-yellow { background: var(--yellow); }
+.gradient-bar { height: 2px; background: linear-gradient(90deg, var(--mint), var(--pink), var(--yellow)); border-radius: 2px; margin-bottom: 20px; }
+
+.day-row {
+  background: var(--bg2);
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+  padding: 11px 14px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.day-row.today { border: 1.5px solid var(--mint); }
+.day-row.game-day { border: 0.5px solid rgba(255,79,123,0.4); }
+.day-row.past { opacity: 0.4; }
+
+.day-name { font-size: 13px; font-weight: 500; color: var(--text); width: 22px; flex-shrink: 0; }
+.day-badges { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; flex: 1; }
+.today-badge {
+  font-size: 10px; color: var(--mint);
+  background: rgba(61,214,163,0.15);
+  border: 0.5px solid rgba(61,214,163,0.3);
+  border-radius: 20px; padding: 1px 7px;
+  flex-shrink: 0;
+}
+.game-badge {
+  font-size: 10px; color: var(--pink);
+  background: rgba(255,79,123,0.15);
+  border: 0.5px solid rgba(255,79,123,0.3);
+  border-radius: 20px; padding: 1px 7px;
+  flex-shrink: 0;
+}
+.note-text { font-size: 11px; color: var(--text3); }
+.items-text { font-size: 12px; color: var(--text2); flex: 1; }
+
+/* 팝업 */
+.popup-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.75);
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+.popup-overlay.open { display: flex; }
+.popup-box {
+  background: var(--bg2);
+  border: 0.5px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  width: 280px;
+  max-width: 90vw;
+}
+.popup-name { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+.popup-sets { font-size: 12px; color: var(--mint); margin-bottom: 14px; }
+.popup-points { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
+.popup-point { display: flex; gap: 8px; align-items: flex-start; }
+.popup-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--mint); margin-top: 6px; flex-shrink: 0; }
+.popup-point p { font-size: 12px; color: var(--text2); line-height: 1.6; margin: 0; }
+.popup-close { text-align: center; cursor: pointer; font-size: 12px; color: var(--text3); }
+
+/* 아이템 클릭 가능 표시 */
+.item-chip {
+  font-size: 12px; color: var(--text2);
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: var(--border);
+  text-underline-offset: 2px;
+}
+.item-chip:hover { color: var(--mint); }
+.item-sep { font-size: 12px; color: var(--text3); }
+</style>
+</head>
+<body>
+
+<a class="back" href="index.html">← 허브로 돌아가기</a>
+<div class="title-row">
+  <h1 class="title">주간 루틴</h1>
+  <div class="dots">
+    <div class="dot dot-mint"></div>
+    <div class="dot dot-pink"></div>
+    <div class="dot dot-yellow"></div>
+  </div>
+</div>
+<div class="gradient-bar"></div>
+
+<div id="weekly-list"></div>
+
+<div class="popup-overlay" id="popup" onclick="closePopup(event)">
+  <div class="popup-box">
+    <p class="popup-name" id="popup-name"></p>
+    <p class="popup-sets" id="popup-sets"></p>
+    <div class="popup-points" id="popup-points"></div>
+    <p class="popup-close" onclick="document.getElementById('popup').classList.remove('open')">닫기</p>
+  </div>
+</div>
+
+<script>
+const DAY_ORDER = ['월','화','수','목','금','토','일'];
+const DAY_MAP = { 0:'일', 1:'월', 2:'화', 3:'수', 4:'목', 5:'금', 6:'토' };
+
+async function loadJSON(path) {
+  const res = await fetch(path);
+  return res.json();
+}
+
+function getTodayKey() {
+  return DAY_MAP[new Date().getDay()];
+}
+
+function isPast(dayKey) {
+  const order = DAY_ORDER.indexOf(dayKey);
+  const todayOrder = DAY_ORDER.indexOf(getTodayKey());
+  return order < todayOrder;
+}
+
+function openPopup(item) {
+  document.getElementById('popup-name').textContent = item.name;
+  document.getElementById('popup-sets').textContent = item.sets || '';
+  document.getElementById('popup-points').innerHTML = (item.points||[]).map(p => `
+    <div class="popup-point">
+      <div class="popup-dot"></div>
+      <p>${p}</p>
+    </div>
+  `).join('');
+  document.getElementById('popup').classList.add('open');
+}
+
+function closePopup(e) {
+  if (e.target === document.getElementById('popup')) {
+    document.getElementById('popup').classList.remove('open');
+  }
+}
+
+async function init() {
+  const routine = await loadJSON('data/routine.json');
+  const todayKey = getTodayKey();
+
+  window._routineData = routine;
+
+  const html = DAY_ORDER.map(day => {
+    const data = routine[day];
+    if (!data) return '';
+
+    const isToday = day === todayKey;
+    const isGame = data.note === '경기';
+    const past = isPast(day);
+
+    let rowClass = 'day-row';
+    if (isToday) rowClass += ' today';
+    else if (isGame) rowClass += ' game-day';
+    else if (past) rowClass += ' past';
+
+    const badges = [];
+    if (isToday) badges.push(`<span class="today-badge">오늘</span>`);
+    if (isGame) badges.push(`<span class="game-badge">경기</span>`);
+    if (data.note && data.note !== '경기') badges.push(`<span class="note-text">${data.note}</span>`);
+
+    const itemsHtml = data.items.map((item, i) => {
+      const hasDetail = item.points && item.points.length > 0;
+      const sep = i < data.items.length - 1 ? '<span class="item-sep"> · </span>' : '';
+      if (hasDetail) {
+        return `<span class="item-chip" onclick="openPopupByDay('${day}', ${i})">${item.name}</span>${sep}`;
+      }
+      return `<span style="font-size:12px;color:var(--text2);">${item.name}</span>${sep}`;
+    }).join('');
+
+    return `
+      <div class="${rowClass}">
+        <span class="day-name">${day}</span>
+        <div class="day-badges">
+          ${badges.join('')}
+        </div>
+        <div class="items-text">${itemsHtml}</div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('weekly-list').innerHTML = html;
+}
+
+function openPopupByDay(day, idx) {
+  const item = window._routineData[day]?.items[idx];
+  if (item) openPopup(item);
+}
+
+init();
+</script>
+</body>
+</html>
