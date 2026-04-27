@@ -200,8 +200,8 @@ function renderSeasonP(games) {
 
   document.getElementById('season-grid').innerHTML = `
     <div class="sg">
-      <div class="si"><div class="sl">ERA</div><div class="sv ${eraC}">${era!==null?era.toFixed(2):'-'}</div></div>
       <div class="si"><div class="sl">경기</div><div class="sv">${pg.length}</div></div>
+      <div class="si"><div class="sl">ERA</div><div class="sv ${eraC}">${era!==null?era.toFixed(2):'-'}</div></div>
       <div class="si"><div class="sl">승-패-세</div><div class="sv" style="font-size:12px;">${W}-${L}-${S}</div></div>
       <div class="si"><div class="sl">이닝</div><div class="sv">${innF}</div></div>
     </div>
@@ -240,10 +240,10 @@ function renderSeasonB(games) {
       <div class="si"><div class="sl">장타율</div><div class="sv ${slg!==null?bColor('slg',slg):''}">${fmtRate(slg)}</div></div>
     </div>
     <div class="sg">
+      <div class="si"><div class="sl">안타</div><div class="sv">${tH}</div></div>
       <div class="si"><div class="sl">타점</div><div class="sv">${tRBI}</div></div>
       <div class="si"><div class="sl">사사구(HBP)</div><div class="sv">${tBB+tHBP}<span class="sv-sub">(${tHBP})</span></div></div>
       <div class="si"><div class="sl">삼진</div><div class="sv">${tSO}</div></div>
-      <div class="si"><div class="sl">도루</div><div class="sv">${tSB}</div></div>
     </div>
   `;
 }
@@ -348,6 +348,21 @@ function switchRole(mode, i) {
   }
 }
 
+function pitchDecBadge(d) {
+  if (!d) return '';
+  if (d==='W') return '<span class="badge badge-win">투수 : 승</span>';
+  if (d==='L') return '<span class="badge badge-lose">투수 : 패</span>';
+  if (d==='S') return '<span class="badge badge-win">투수 : 세이브</span>';
+  if (d==='ND') return '<span class="badge badge-nd">투수 : ND</span>';
+  return '';
+}
+
+function batPosBadge(b) {
+  if (!b) return '';
+  const pos = Array.isArray(b.position) ? b.position.join('·') : b.position;
+  return `<span class="badge" style="background:rgba(255,214,0,0.15);color:var(--yellow);border:0.5px solid rgba(255,214,0,0.3);">타자 : ${pos}</span>`;
+}
+
 function renderGames(games) {
   const sorted = [...games].sort((a,b)=>b.date.localeCompare(a.date));
   document.getElementById('games-label').textContent = `경기 기록 · ${games.length}경기`;
@@ -355,7 +370,7 @@ function renderGames(games) {
     const hasPitch = !!g.pitching;
     const hasBat = !!g.batting;
     const defP = hasPitch;
-    const dec = hasPitch ? g.pitching.decision : null;
+    const bothExist = hasPitch && hasBat;
     return `
       <div class="game-card">
         <div class="game-header" onclick="toggleGame(${i})">
@@ -363,21 +378,19 @@ function renderGames(games) {
             <div class="game-date-row">
               <span class="game-date">${fmtDate(g.date)}</span>
               ${teamBadge(g.teamResult)}
-              ${dec?decBadge(dec):''}
+              ${hasPitch ? pitchDecBadge(g.pitching.decision) : ''}
+              ${hasBat ? batPosBadge(g.batting) : ''}
             </div>
             <p class="game-opponent">vs ${g.opponent} · ${g.score}</p>
           </div>
           <span class="chevron" id="chev-${i}">▼</span>
         </div>
         <div class="game-body" id="body-${i}">
+          ${bothExist ? `
           <div class="tabs" style="margin-bottom:14px;">
-            <div id="pb-${i}" class="tab-btn ${hasPitch?(defP?'active-p':''):'inactive'}"
-              onclick="${hasPitch?`switchRole('p',${i})`:''}"
-            >투수</div>
-            <div id="bb-${i}" class="tab-btn ${hasBat?(!defP?'active-b':''):'inactive'}"
-              onclick="${hasBat?`switchRole('b',${i})`:''}"
-            >타자</div>
-          </div>
+            <div id="pb-${i}" class="tab-btn ${defP?'active-p':''}" onclick="switchRole('p',${i})">투수</div>
+            <div id="bb-${i}" class="tab-btn ${!defP?'active-b':''}" onclick="switchRole('b',${i})">타자</div>
+          </div>` : ''}
           ${hasPitch?`<div id="pd-${i}" style="display:${defP?'block':'none'};">${pitchBody(g,i)}</div>`:''}
           ${hasBat?`<div id="bd-${i}" style="display:${!defP?'block':'none'};">${batBody(g,i)}</div>`:''}
         </div>

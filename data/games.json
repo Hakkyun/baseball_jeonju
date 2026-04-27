@@ -116,8 +116,8 @@
     "batting": {
       "position": ["SS"],
       "pa": 3, "ab": 2, "hit": 1, "rbi": 2, "run": 1,
-      "bb": 0, "hbp": 0, "so": 0, "sb": 1,
-      "d": 0, "t": 1, "hr": 0,
+      "bb": 0, "hbp": 0, "so": 1, "sb": 1,
+      "d": 1, "t": 0, "hr": 0,
       "feedback": null
     }
   },
