@@ -240,7 +240,7 @@ body {
   </a>
 </div>
 <div class="menu-grid">
-  <a class="menu-card gray" href="gamelog.html">
+  <a class="menu-card gray" href="gamelog.html" style="border-color:rgba(240,240,240,0.2);">
     <p class="menu-tag gray">집 · 여유있을 때</p>
     <p class="menu-name">경기일지</p>
     <p class="menu-desc">기록 + 피드백</p>
@@ -254,8 +254,12 @@ body {
 
 <!-- 시즌 요약 -->
 <a class="season-card" href="gamelog.html" id="season-card">
-  <div class="season-stats" id="season-stats"></div>
-  <span class="season-link">경기일지 →</span>
+  <div style="flex:1;">
+    <div id="season-stats-p"></div>
+    <div style="height:0.5px;background:var(--border);margin:8px 0;"></div>
+    <div id="season-stats-b"></div>
+  </div>
+  <span class="season-link" style="align-self:center;">경기일지 →</span>
 </a>
 
 <!-- 팝업 -->
@@ -367,34 +371,64 @@ function renderRoutine(routine) {
   window._routineItems = data.items;
 }
 
-function renderSeason(games) {
-  const totalOuts = games.reduce((s,g) => s + (g.outs||0), 0);
-  const totalER = games.reduce((s,g) => s + (g.er||0), 0);
-  const totalSO = games.reduce((s,g) => s + (g.so||0), 0);
-  const totalBB = games.reduce((s,g) => s + (g.bb||0) + (g.hbp||0), 0);
-  const wins = games.filter(g=>g.decision==='W').length;
-  const losses = games.filter(g=>g.decision==='L').length;
-  const saves = games.filter(g=>g.decision==='S').length;
-  const innVal = totalOuts / 3;
-  const era = innVal > 0 ? (totalER / innVal * 7).toFixed(2) : '-';
-  const innFmt = `${Math.floor(totalOuts/3)}.${totalOuts%3}`;
+function fmtRate(v) {
+  if (v===null||v===undefined||isNaN(v)) return '-';
+  return v.toFixed(3).replace(/^0/,'');
+}
 
-  document.getElementById('season-stats').innerHTML = `
-    <div class="season-item">
-      <div class="season-val">${wins}-${losses}-${saves}</div>
-      <div class="season-lbl">승-패-세</div>
+function renderSeason(games) {
+  // 투수 누적
+  const pg = games.filter(g=>g.pitching);
+  const tO = pg.reduce((s,g)=>s+(g.pitching.outs||0),0);
+  const tER = pg.reduce((s,g)=>s+(g.pitching.er||0),0);
+  const tSO = pg.reduce((s,g)=>s+(g.pitching.so||0),0);
+  const W = pg.filter(g=>g.pitching.decision==='W').length;
+  const L = pg.filter(g=>g.pitching.decision==='L').length;
+  const S = pg.filter(g=>g.pitching.decision==='S').length;
+  const iv = tO/3;
+  const era = iv>0?(tER/iv*7):null;
+  const eraFmt = era!==null?era.toFixed(2):'-';
+  const eraC = era!==null?(era<=5?'var(--mint)':era<=8?'var(--yellow)':'var(--pink)'):'var(--text)';
+  const innFmt = `${Math.floor(tO/3)}.${tO%3}`;
+
+  document.getElementById('season-stats-p').innerHTML = `
+    <div style="display:flex;align-items:center;gap:4px;margin-bottom:8px;">
+      <span style="font-size:9px;color:var(--mint);letter-spacing:0.06em;border:0.5px solid rgba(61,214,163,0.3);border-radius:10px;padding:1px 6px;">투수</span>
     </div>
-    <div class="season-item">
-      <div class="season-val">${innFmt}</div>
-      <div class="season-lbl">이닝</div>
+    <div class="season-stats">
+      <div class="season-item"><div class="season-val" style="font-size:13px;">${W}-${L}-${S}</div><div class="season-lbl">승-패-세</div></div>
+      <div class="season-item"><div class="season-val">${innFmt}</div><div class="season-lbl">이닝</div></div>
+      <div class="season-item"><div class="season-val" style="color:${eraC};">${eraFmt}</div><div class="season-lbl">ERA</div></div>
+      <div class="season-item"><div class="season-val" style="color:var(--mint);">${tSO}</div><div class="season-lbl">삼진</div></div>
     </div>
-    <div class="season-item">
-      <div class="season-val yellow">${era}</div>
-      <div class="season-lbl">ERA</div>
+  `;
+
+  // 타자 누적
+  const bg = games.filter(g=>g.batting);
+  const tAB = bg.reduce((s,g)=>s+(g.batting.ab||0),0);
+  const tH = bg.reduce((s,g)=>s+(g.batting.hit||0),0);
+  const tRBI = bg.reduce((s,g)=>s+(g.batting.rbi||0),0);
+  const tBB = bg.reduce((s,g)=>s+(g.batting.bb||0),0);
+  const tHBP = bg.reduce((s,g)=>s+(g.batting.hbp||0),0);
+  const t2B = bg.reduce((s,g)=>s+(g.batting.d||0),0);
+  const t3B = bg.reduce((s,g)=>s+(g.batting.t||0),0);
+  const tHR = bg.reduce((s,g)=>s+(g.batting.hr||0),0);
+  const avg = tAB>0?tH/tAB:null;
+  const obp = (tAB+tBB+tHBP)>0?(tH+tBB+tHBP)/(tAB+tBB+tHBP):null;
+  const tb = tH+t2B+t3B*2+tHR*3;
+  const slg = tAB>0?tb/tAB:null;
+  const avgC = avg===null?'var(--text)':avg>=0.400?'var(--mint)':avg>=0.300?'var(--yellow)':'var(--pink)';
+  const obpC = obp===null?'var(--text)':obp>=0.500?'var(--mint)':obp>=0.400?'var(--yellow)':'var(--pink)';
+
+  document.getElementById('season-stats-b').innerHTML = `
+    <div style="display:flex;align-items:center;gap:4px;margin-bottom:8px;">
+      <span style="font-size:9px;color:var(--yellow);letter-spacing:0.06em;border:0.5px solid rgba(255,214,0,0.3);border-radius:10px;padding:1px 6px;">타자</span>
     </div>
-    <div class="season-item">
-      <div class="season-val mint">${totalSO}</div>
-      <div class="season-lbl">삼진</div>
+    <div class="season-stats">
+      <div class="season-item"><div class="season-val" style="color:${avgC};">${fmtRate(avg)}</div><div class="season-lbl">타율</div></div>
+      <div class="season-item"><div class="season-val" style="color:${obpC};">${fmtRate(obp)}</div><div class="season-lbl">출루율</div></div>
+      <div class="season-item"><div class="season-val">${tRBI}</div><div class="season-lbl">타점</div></div>
+      <div class="season-item"><div class="season-val">${bg.length}</div><div class="season-lbl">경기</div></div>
     </div>
   `;
 }
