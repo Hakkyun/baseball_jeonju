@@ -19,8 +19,8 @@
   padding: 4px 14px; border-radius: 20px; font-size: 11px; cursor: pointer;
   border: 0.5px solid var(--border); background: var(--bg3); color: var(--text3); transition: all 0.15s;
 }
-.tab-btn.active-p { background: rgba(61,214,163,0.1); border-color: rgba(61,214,163,0.3); color: var(--mint-text); }
-.tab-btn.active-b { background: rgba(255,214,0,0.1); border-color: rgba(255,214,0,0.3); color: var(--yellow-text); }
+.tab-btn.active-p { background: rgba(61,214,163,0.1); border-color: rgba(61,214,163,0.3); color: var(--mint); }
+.tab-btn.active-b { background: rgba(255,214,0,0.1); border-color: rgba(255,214,0,0.3); color: var(--yellow); }
 .tab-btn.inactive { opacity: 0.35; cursor: default; }
 
 .sg { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; }
@@ -28,7 +28,7 @@
 .si { background: var(--bg3); border-radius: 8px; padding: 8px 4px; text-align: center; }
 .sl { font-size: 9px; color: var(--text3); margin-bottom: 3px; }
 .sv { font-size: 14px; font-weight: 500; color: var(--text); }
-.sv.mint { color: var(--mint-text); } .sv.yellow { color: var(--yellow-text); } .sv.pink { color: var(--pink-text); }
+.sv.mint { color: var(--mint); } .sv.yellow { color: var(--yellow); } .sv.pink { color: var(--pink); }
 .sv-sub { font-size: 11px; }
 
 .game-card { background: var(--bg2); border: 0.5px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 8px; }
@@ -50,15 +50,15 @@
 .review-item:last-child { margin-bottom: 0; }
 .r-topic-row { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 4px; }
 .s-icon { font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
-.s-O { color: var(--mint-text); } .s-T { color: var(--yellow-text); } .s-X { color: var(--pink-text); }
+.s-O { color: var(--mint); } .s-T { color: var(--yellow); } .s-X { color: var(--pink); }
 .r-topic { font-size: 12px; color: var(--text2); line-height: 1.6; }
 .r-eval { font-size: 11px; color: var(--text3); margin-left: 18px; line-height: 1.6; }
 
 .next-card { background: rgba(61,214,163,0.05); border: 0.5px solid rgba(61,214,163,0.3); border-radius: 10px; padding: 12px; }
-.next-title { font-size: 10px; color: var(--mint-text); margin-bottom: 8px; }
+.next-title { font-size: 10px; color: var(--mint); margin-bottom: 8px; }
 .next-item { display: flex; gap: 8px; margin-bottom: 5px; }
 .next-item:last-child { margin-bottom: 0; }
-.next-num { font-size: 12px; color: var(--mint-text); font-weight: 500; flex-shrink: 0; }
+.next-num { font-size: 12px; color: var(--mint); font-weight: 500; flex-shrink: 0; }
 .next-text { font-size: 12px; color: var(--text2); line-height: 1.6; }
 </style>
 </head>
@@ -321,7 +321,7 @@ function pitchDecBadge(d) {
 function batPosBadge(b) {
   if (!b) return '';
   const pos = Array.isArray(b.position) ? b.position.join('·') : b.position;
-  return `<span class="badge" class="badge-yellow-pos">타자 : ${pos}</span>`;
+  return `<span class="badge" style="background:rgba(255,214,0,0.15);color:var(--yellow);border:0.5px solid rgba(255,214,0,0.3);">타자 : ${pos}</span>`;
 }
 
 function renderGames(games) {
@@ -386,10 +386,6 @@ init();
   </svg>
 </button>
 <script>
-function 'var(--yellow-text)' {
-  return document.documentElement.getAttribute('data-theme') === 'light'
-    ? 'var(--yellow-text)' : 'var(--yellow)';
-}
 function toggleTheme() {
   const current = document.documentElement.getAttribute('data-theme') || 'dark';
   const next = current === 'dark' ? 'light' : 'dark';
