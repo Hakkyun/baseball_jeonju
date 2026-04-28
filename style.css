@@ -27,6 +27,11 @@
   --text2: #555;
   --text3: #999;
   --overlay: rgba(0, 0, 0, 0.4);
+  /* 옐로우: 단독 텍스트는 오렌지골드, 배지 텍스트는 황갈색 */
+  --yellow-text: #F59B00;
+  --yellow-badge-text: #8B6500;
+  /* 민트: 라이트에서 에메랄드 그린으로 */
+  --mint: #00B87A;
 }
 
 /* ── 3. 리셋 & 베이스 ── */
@@ -114,6 +119,7 @@ body {
 .badge-win  { background: rgba(61,214,163,0.15);  color: var(--mint);   border: 0.5px solid rgba(61,214,163,0.3); }
 .badge-lose { background: rgba(255,79,123,0.15);  color: var(--pink);   border: 0.5px solid rgba(255,79,123,0.3); }
 .badge-draw { background: rgba(255,214,0,0.15);   color: var(--yellow); border: 0.5px solid rgba(255,214,0,0.3); }
+[data-theme="light"] .badge-draw { background: rgba(255,214,0,0.25); color: var(--yellow-badge-text); border-color: rgba(255,214,0,0.6); }
 .badge-nd   { background: rgba(170,170,170,0.1);  color: var(--text2);  border: 0.5px solid rgba(170,170,170,0.2); }
 .badge-home { background: rgba(61,214,163,0.12);  color: var(--mint);   border: 0.5px solid rgba(61,214,163,0.3); }
 .badge-away { background: rgba(170,170,170,0.1);  color: var(--text3);  border: 0.5px solid rgba(170,170,170,0.2); }
@@ -181,3 +187,27 @@ body {
 /* 라이트 모드: 태양 아이콘 표시 */
 [data-theme="light"] .icon-moon { display: none; }
 [data-theme="light"] .icon-sun  { display: block; }
+
+/* ── 11. 라이트 모드 옐로우 텍스트 오버라이드 ── */
+/* 단독 텍스트 (숫자, 라벨 등): #F59B00 오렌지골드 */
+[data-theme="light"] .text-yellow,
+[data-theme="light"] .sv.yellow,
+[data-theme="light"] .season-val.yellow,
+[data-theme="light"] .dday,
+[data-theme="light"] .key-title,
+[data-theme="light"] .next-title,
+[data-theme="light"] .note-title,
+[data-theme="light"] .detail-group-title,
+[data-theme="light"] .step-num,
+[data-theme="light"] .next-num,
+[data-theme="light"] .practice-num {
+  color: var(--yellow-text) !important;
+}
+/* 배지 텍스트: #8B6500 황갈색 */
+[data-theme="light"] .badge-nd,
+[data-theme="light"] .b-yellow,
+[data-theme="light"] .tl-badge.b-yellow {
+  background: rgba(255,214,0,0.25);
+  color: var(--yellow-badge-text);
+  border-color: rgba(255,214,0,0.6);
+}
