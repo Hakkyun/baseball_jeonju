@@ -2,63 +2,26 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+<script>
+  (function() {
+    const t = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+<link rel="stylesheet" href="style.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>연습 정보 · 학균</title>
 <style>
-:root {
-  --bg: #0f0f0f;
-  --bg2: #1a1a1a;
-  --bg3: #242424;
-  --border: #2e2e2e;
-  --text: #f0f0f0;
-  --text2: #aaa;
-  --text3: #555;
-  --mint: #3DD6A3;
-  --pink: #FF4F7B;
-  --yellow: #FFD600;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  padding: 48px 20px 40px;
-  max-width: 480px;
-  margin: 0 auto;
-}
-.back { font-size: 11px; color: var(--text3); margin-bottom: 12px; display: block; text-decoration: none; }
-.back:hover { color: var(--text2); }
-.title-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-.title { font-size: 22px; font-weight: 500; color: var(--text); }
-.dots { display: flex; gap: 3px; }
-.dot { width: 6px; height: 6px; border-radius: 50%; }
-.dot-mint { background: var(--mint); }
-.dot-pink { background: var(--pink); }
-.dot-yellow { background: var(--yellow); }
-.gradient-bar { height: 2px; background: linear-gradient(90deg, var(--mint), var(--pink), var(--yellow)); border-radius: 2px; margin-bottom: 20px; }
-
-.category-label { font-size: 10px; color: var(--text3); letter-spacing: 0.08em; margin: 16px 0 8px; }
-.category-label:first-of-type { margin-top: 0; }
-
+/* ── training 전용 ── */
 .item-card {
-  background: var(--bg2);
-  border: 0.5px solid var(--border);
-  border-radius: 12px;
-  padding: 14px 16px;
-  margin-bottom: 6px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  text-decoration: none;
-  cursor: pointer;
-  transition: background 0.15s;
+  background: var(--bg2); border: 0.5px solid var(--border);
+  border-radius: 12px; padding: 14px 16px; margin-bottom: 6px;
+  display: flex; justify-content: space-between; align-items: center;
+  text-decoration: none; cursor: pointer; transition: background 0.15s;
 }
 .item-card:hover { background: var(--bg3); }
 .item-card.available { border-color: rgba(255,79,123,0.3); }
 .item-card.soon { opacity: 0.4; cursor: default; }
-
-.item-left { }
 .item-name { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
 .item-desc { font-size: 11px; color: var(--text3); }
 .item-arrow { font-size: 13px; color: var(--text3); }
@@ -108,5 +71,25 @@ body {
   <span class="item-soon">곧 추가</span>
 </div>
 
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="테마 전환">
+  <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/>
+  </svg>
+  <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="5"/>
+    <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+    <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+  </svg>
+</button>
+<script>
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+}
+</script>
 </body>
 </html>
