@@ -11,27 +11,33 @@
   --text: #f0f0f0;
   --text2: #aaa;
   --text3: #555;
-  --mint: #3DD6A3;
-  --pink: #FF4F7B;
-  --yellow: #FFD600;
   --overlay: rgba(0, 0, 0, 0.75);
+  /* 포인트 컬러 — 다크 기본 */
+  --mint-text: #3DD6A3;
+  --mint-badge: #3DD6A3;
+  --yellow-text: #FFD600;
+  --yellow-badge: #FFD600;
+  --pink-text: #FF4F7B;
+  --pink-badge: #FF4F7B;
 }
 
 /* ── 2. 라이트 모드 변수 ── */
 [data-theme="light"] {
   --bg: #f5f5f5;
   --bg2: #ffffff;
-  --bg3: #ebebeb;
+  --bg3: #f1f1f1;
   --border: #ddd;
   --text: #111111;
   --text2: #555;
   --text3: #999;
   --overlay: rgba(0, 0, 0, 0.4);
-  /* 옐로우: 단독 텍스트는 오렌지골드, 배지 텍스트는 황갈색 */
-  --yellow-text: #F59B00;
-  --yellow-badge-text: #8B6500;
-  /* 민트: 라이트에서 에메랄드 그린으로 */
-  --mint: #00B87A;
+  /* 포인트 컬러 — 라이트 오버라이드 */
+  --mint-text: #00B87A;
+  --mint-badge: #00B87A;
+  --yellow-text: #FFC200;
+  --yellow-badge: #8B6500;
+  --pink-text: #FF4F7B;
+  --pink-badge: #FF4F7B;
 }
 
 /* ── 3. 리셋 & 베이스 ── */
@@ -79,13 +85,13 @@ body {
 
 .dots { display: flex; gap: 3px; align-items: center; }
 .dot { width: 6px; height: 6px; border-radius: 50%; }
-.dot-mint  { background: var(--mint); }
-.dot-pink  { background: var(--pink); }
-.dot-yellow { background: var(--yellow); }
+.dot-mint  { background: var(--mint-badge); }
+.dot-pink  { background: var(--pink-badge); }
+.dot-yellow { background: var(--yellow-badge); }
 
 .gradient-bar {
   height: 2px;
-  background: linear-gradient(90deg, var(--mint), var(--pink), var(--yellow));
+  background: linear-gradient(90deg, var(--mint-badge), var(--pink-badge), var(--yellow-badge));
   border-radius: 2px;
   margin-bottom: 20px;
 }
@@ -116,15 +122,15 @@ body {
   padding: 2px 9px;
   border-radius: 20px;
 }
-.badge-win  { background: rgba(61,214,163,0.15);  color: var(--mint);   border: 0.5px solid rgba(61,214,163,0.3); }
-.badge-lose { background: rgba(255,79,123,0.15);  color: var(--pink);   border: 0.5px solid rgba(255,79,123,0.3); }
-.badge-draw { background: rgba(255,214,0,0.15);   color: var(--yellow); border: 0.5px solid rgba(255,214,0,0.3); }
+.badge-win  { background: rgba(61,214,163,0.15);  color: var(--mint-badge);   border: 0.5px solid rgba(61,214,163,0.3); }
+.badge-lose { background: rgba(255,79,123,0.15);  color: var(--pink-badge);   border: 0.5px solid rgba(255,79,123,0.3); }
+.badge-draw { background: rgba(255,214,0,0.15);   color: var(--yellow-badge); border: 0.5px solid rgba(255,214,0,0.3); }
 [data-theme="light"] .badge-draw { background: rgba(255,214,0,0.25); color: var(--yellow-badge-text); border-color: rgba(255,214,0,0.6); }
 .badge-nd   { background: rgba(170,170,170,0.1);  color: var(--text2);  border: 0.5px solid rgba(170,170,170,0.2); }
-.badge-home { background: rgba(61,214,163,0.12);  color: var(--mint);   border: 0.5px solid rgba(61,214,163,0.3); }
+.badge-home { background: rgba(61,214,163,0.12);  color: var(--mint-badge);   border: 0.5px solid rgba(61,214,163,0.3); }
 .badge-away { background: rgba(170,170,170,0.1);  color: var(--text3);  border: 0.5px solid rgba(170,170,170,0.2); }
-.badge-next { background: rgba(255,79,123,0.15);  color: var(--pink);   border: 0.5px solid rgba(255,79,123,0.3); }
-.badge-participated { background: rgba(61,214,163,0.1); color: var(--mint); border: 0.5px solid rgba(61,214,163,0.2); }
+.badge-next { background: rgba(255,79,123,0.15);  color: var(--pink-badge);   border: 0.5px solid rgba(255,79,123,0.3); }
+.badge-participated { background: rgba(61,214,163,0.1); color: var(--mint-badge); border: 0.5px solid rgba(61,214,163,0.2); }
 
 /* ── 8. 체브론 ── */
 .chevron { font-size: 11px; color: var(--text3); transition: transform 0.2s; }
@@ -151,10 +157,10 @@ body {
   max-width: 90vw;
 }
 .popup-name  { font-size: 15px; font-weight: 500; color: var(--text);  margin-bottom: 4px; }
-.popup-sets  { font-size: 12px; color: var(--mint);  margin-bottom: 14px; }
+.popup-sets  { font-size: 12px; color: var(--mint-text);  margin-bottom: 14px; }
 .popup-points { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
 .popup-point { display: flex; gap: 8px; align-items: flex-start; }
-.popup-dot   { width: 4px; height: 4px; border-radius: 50%; background: var(--mint); margin-top: 6px; flex-shrink: 0; }
+.popup-dot   { width: 4px; height: 4px; border-radius: 50%; background: var(--mint-badge); margin-top: 6px; flex-shrink: 0; }
 .popup-point p { font-size: 12px; color: var(--text2); line-height: 1.6; margin: 0; }
 .popup-close { text-align: center; cursor: pointer; font-size: 12px; color: var(--text3); }
 
@@ -188,11 +194,29 @@ body {
 [data-theme="light"] .icon-moon { display: none; }
 [data-theme="light"] .icon-sun  { display: block; }
 
-/* ── 11. 라이트 모드 옐로우 텍스트 오버라이드 ── */
+/* ── 12. JS 인라인 옐로우 배지 대체 클래스 ── */
+.badge-inline-yellow,
+.badge-yellow-pos {
+  font-size: 9px;
+  color: var(--yellow);
+  letter-spacing: 0.06em;
+  border: 0.5px solid rgba(255,214,0,0.3);
+  border-radius: 10px;
+  padding: 1px 6px;
+  background: rgba(255,214,0,0.1);
+}
+[data-theme="light"] .badge-inline-yellow,
+[data-theme="light"] .badge-yellow-pos {
+  color: var(--yellow-badge-text);
+  background: rgba(255,214,0,0.2);
+  border-color: rgba(255,214,0,0.5);
+}
 /* 단독 텍스트 (숫자, 라벨 등): #F59B00 오렌지골드 */
 [data-theme="light"] .text-yellow,
 [data-theme="light"] .sv.yellow,
 [data-theme="light"] .season-val.yellow,
+[data-theme="light"] .menu-tag.yellow,
+[data-theme="light"] .s-T,
 [data-theme="light"] .dday,
 [data-theme="light"] .key-title,
 [data-theme="light"] .next-title,
@@ -203,11 +227,33 @@ body {
 [data-theme="light"] .practice-num {
   color: var(--yellow-text) !important;
 }
-/* 배지 텍스트: #8B6500 황갈색 */
+/* 배지/탭 텍스트: #8B6500 황갈색 */
 [data-theme="light"] .badge-nd,
 [data-theme="light"] .b-yellow,
-[data-theme="light"] .tl-badge.b-yellow {
-  background: rgba(255,214,0,0.25);
-  color: var(--yellow-badge-text);
-  border-color: rgba(255,214,0,0.6);
+[data-theme="light"] .tl-badge.b-yellow,
+[data-theme="light"] .tab-btn.active-b {
+  background: rgba(255,214,0,0.2);
+  color: var(--yellow-badge-text) !important;
+  border-color: rgba(255,214,0,0.5);
+}
+
+/* ── 11. JS 인라인 배지 대체 클래스 (변수 기반) ── */
+.badge-inline-yellow,
+.badge-yellow-pos {
+  font-size: 9px;
+  color: var(--yellow-badge);
+  letter-spacing: 0.06em;
+  border: 0.5px solid rgba(255,214,0,0.3);
+  border-radius: 10px;
+  padding: 1px 6px;
+  background: rgba(255,214,0,0.1);
+}
+.badge-inline-mint {
+  font-size: 9px;
+  color: var(--mint-badge);
+  letter-spacing: 0.06em;
+  border: 0.5px solid rgba(61,214,163,0.3);
+  border-radius: 10px;
+  padding: 1px 6px;
+  background: rgba(61,214,163,0.1);
 }
