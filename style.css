@@ -1,5 +1,17 @@
 /* =============================================
-   style.css — 학균 야구 기록 공통 스타일
+   style.css — The Clubhouse 공통 스타일
+   =============================================
+
+   ── 배지 매핑 참조표 ──
+   .badge-win          → badge badge-mint    (승)
+   .badge-lose         → badge badge-pink    (패)
+   .badge-draw         → badge badge-yellow  (무)
+   .badge-nd           → badge badge-gray    (ND)
+   .badge-home         → badge badge-mint    (홈)
+   .badge-away         → badge badge-gray    (원정)
+   .badge-next         → badge badge-pink    (다음 경기)
+   .badge-participated → badge badge-mint    (참여)
+   (신규) 미참여        → badge badge-pink    (불참)
    ============================================= */
 
 /* ── 1. CSS 변수 (다크 기본) ── */
@@ -11,9 +23,6 @@
   --text: #f0f0f0;
   --text2: #aaa;
   --text3: #555;
-  --mint: #3DD6A3;
-  --pink: #FF4F7B;
-  --yellow: #FFD600;
   --overlay: rgba(0, 0, 0, 0.75);
 }
 
@@ -21,17 +30,12 @@
 [data-theme="light"] {
   --bg: #f5f5f5;
   --bg2: #ffffff;
-  --bg3: #ebebeb;
+  --bg3: #f1f1f1;
   --border: #ddd;
   --text: #111111;
   --text2: #555;
   --text3: #999;
   --overlay: rgba(0, 0, 0, 0.4);
-  /* 옐로우: 단독 텍스트는 오렌지골드, 배지 텍스트는 황갈색 */
-  --yellow-text: #F59B00;
-  --yellow-badge-text: #8B6500;
-  /* 민트: 라이트에서 에메랄드 그린으로 */
-  --mint: #00B87A;
 }
 
 /* ── 3. 리셋 & 베이스 ── */
@@ -77,20 +81,21 @@ body {
   color: var(--text);
 }
 
+/* 점 3개 & 그라디언트 바 — 고정 하드코딩 */
 .dots { display: flex; gap: 3px; align-items: center; }
 .dot { width: 6px; height: 6px; border-radius: 50%; }
-.dot-mint  { background: var(--mint); }
-.dot-pink  { background: var(--pink); }
-.dot-yellow { background: var(--yellow); }
+.dot-mint   { background: #3DD6A3; }
+.dot-pink   { background: #FF4F7B; }
+.dot-yellow { background: #FFD600; }
 
 .gradient-bar {
   height: 2px;
-  background: linear-gradient(90deg, var(--mint), var(--pink), var(--yellow));
+  background: linear-gradient(90deg, #3DD6A3, #FF4F7B, #FFD600);
   border-radius: 2px;
   margin-bottom: 20px;
 }
 
-/* ── 5. 섹션 레이블 (구 month-label / category-label / games-label 통일) ── */
+/* ── 5. 섹션 레이블 ── */
 .section-label {
   font-size: 10px;
   color: var(--text3);
@@ -116,15 +121,7 @@ body {
   padding: 2px 9px;
   border-radius: 20px;
 }
-.badge-win  { background: rgba(61,214,163,0.15);  color: var(--mint);   border: 0.5px solid rgba(61,214,163,0.3); }
-.badge-lose { background: rgba(255,79,123,0.15);  color: var(--pink);   border: 0.5px solid rgba(255,79,123,0.3); }
-.badge-draw { background: rgba(255,214,0,0.15);   color: var(--yellow); border: 0.5px solid rgba(255,214,0,0.3); }
-[data-theme="light"] .badge-draw { background: rgba(255,214,0,0.25); color: var(--yellow-badge-text); border-color: rgba(255,214,0,0.6); }
-.badge-nd   { background: rgba(170,170,170,0.1);  color: var(--text2);  border: 0.5px solid rgba(170,170,170,0.2); }
-.badge-home { background: rgba(61,214,163,0.12);  color: var(--mint);   border: 0.5px solid rgba(61,214,163,0.3); }
-.badge-away { background: rgba(170,170,170,0.1);  color: var(--text3);  border: 0.5px solid rgba(170,170,170,0.2); }
-.badge-next { background: rgba(255,79,123,0.15);  color: var(--pink);   border: 0.5px solid rgba(255,79,123,0.3); }
-.badge-participated { background: rgba(61,214,163,0.1); color: var(--mint); border: 0.5px solid rgba(61,214,163,0.2); }
+/* 구버전 .badge-win/.badge-lose 등 삭제 — 유틸 클래스(badge-mint 등) 사용 */
 
 /* ── 8. 체브론 ── */
 .chevron { font-size: 11px; color: var(--text3); transition: transform 0.2s; }
@@ -151,10 +148,10 @@ body {
   max-width: 90vw;
 }
 .popup-name  { font-size: 15px; font-weight: 500; color: var(--text);  margin-bottom: 4px; }
-.popup-sets  { font-size: 12px; color: var(--mint);  margin-bottom: 14px; }
+.popup-sets  { font-size: 12px; color: var(--text2); margin-bottom: 14px; }
 .popup-points { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
 .popup-point { display: flex; gap: 8px; align-items: flex-start; }
-.popup-dot   { width: 4px; height: 4px; border-radius: 50%; background: var(--mint); margin-top: 6px; flex-shrink: 0; }
+.popup-dot   { width: 4px; height: 4px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
 .popup-point p { font-size: 12px; color: var(--text2); line-height: 1.6; margin: 0; }
 .popup-close { text-align: center; cursor: pointer; font-size: 12px; color: var(--text3); }
 
@@ -180,34 +177,71 @@ body {
 .theme-toggle:active { transform: scale(0.95); }
 .theme-toggle svg { width: 18px; height: 18px; }
 
-/* 다크 모드: 달 아이콘 표시 */
 .icon-moon { display: block; }
 .icon-sun  { display: none; }
-
-/* 라이트 모드: 태양 아이콘 표시 */
 [data-theme="light"] .icon-moon { display: none; }
 [data-theme="light"] .icon-sun  { display: block; }
 
-/* ── 11. 라이트 모드 옐로우 텍스트 오버라이드 ── */
-/* 단독 텍스트 (숫자, 라벨 등): #F59B00 오렌지골드 */
-[data-theme="light"] .text-yellow,
-[data-theme="light"] .sv.yellow,
-[data-theme="light"] .season-val.yellow,
-[data-theme="light"] .dday,
-[data-theme="light"] .key-title,
-[data-theme="light"] .next-title,
-[data-theme="light"] .note-title,
-[data-theme="light"] .detail-group-title,
-[data-theme="light"] .step-num,
-[data-theme="light"] .next-num,
-[data-theme="light"] .practice-num {
-  color: var(--yellow-text) !important;
+/* ── 11. 유틸 색 클래스 ── */
+
+/* MINT */
+.text-mint { color: #3DD6A3; }
+[data-theme="light"] .text-mint { color: #00B87A; }
+
+.badge-mint {
+  background: rgba(61,214,163,0.15);
+  color: #3DD6A3;
+  border: 0.5px solid rgba(61,214,163,0.3);
 }
-/* 배지 텍스트: #8B6500 황갈색 */
-[data-theme="light"] .badge-nd,
-[data-theme="light"] .b-yellow,
-[data-theme="light"] .tl-badge.b-yellow {
+[data-theme="light"] .badge-mint {
+  background: rgba(0,184,122,0.15);
+  color: #00B87A;
+  border-color: rgba(0,184,122,0.3);
+}
+
+.border-mint { border-color: rgba(61,214,163,0.4); }
+[data-theme="light"] .border-mint { border-color: rgba(0,184,122,0.4); }
+
+/* PINK */
+.text-pink { color: #FF4F7B; }
+
+.badge-pink {
+  background: rgba(255,79,123,0.15);
+  color: #FF4F7B;
+  border: 0.5px solid rgba(255,79,123,0.3);
+}
+
+.border-pink { border-color: rgba(255,79,123,0.4); }
+
+/* YELLOW */
+.text-yellow { color: #FFD600; }
+[data-theme="light"] .text-yellow { color: #F59B00; }
+
+.badge-yellow {
+  background: rgba(255,214,0,0.15);
+  color: #FFD600;
+  border: 0.5px solid rgba(255,214,0,0.3);
+}
+[data-theme="light"] .badge-yellow {
   background: rgba(255,214,0,0.25);
-  color: var(--yellow-badge-text);
+  color: #8B6500;
   border-color: rgba(255,214,0,0.6);
 }
+
+.border-yellow { border-color: rgba(255,214,0,0.3); }
+[data-theme="light"] .border-yellow { border-color: rgba(255,214,0,0.5); }
+
+/* GRAY */
+.badge-gray {
+  background: rgba(170,170,170,0.1);
+  color: #aaa;
+  border: 0.5px solid rgba(170,170,170,0.2);
+}
+[data-theme="light"] .badge-gray {
+  background: rgba(100,100,100,0.1);
+  color: #555;
+  border-color: rgba(100,100,100,0.25);
+}
+
+.border-gray { border-color: rgba(240,240,240,0.2); }
+[data-theme="light"] .border-gray { border-color: rgba(0,0,0,0.12); }
