@@ -30,7 +30,7 @@
 .row-time { font-size: 12px; color: var(--text2); margin-bottom: 3px; }
 .row-venue { font-size: 11px; color: var(--text3); }
 .badge { margin-left: 6px; }
-.dday { font-size: 12px; font-weight: 500; color: var(--pink); }
+.dday { font-size: 12px; font-weight: 500; color: #FF4F7B; }
 </style>
 </head>
 <body>
@@ -119,19 +119,19 @@ async function init() {
       else rowClass += ' upcoming';
 
       const homeBadge = isHome
-        ? '<span class="badge badge-home">홈</span>'
-        : '<span class="badge badge-away">원정</span>';
+        ? '<span class="badge badge-mint">홈</span>'
+        : '<span class="badge badge-gray">원정</span>';
 
       const rightContent = isNext
         ? `<div class="dday">D-${dday}</div><div class="row-venue">${g.venue}</div>`
         : isDone
-          ? `<div class="row-time">${isParticipated ? '<span class="badge badge-participated">등판</span>' : '불참'}</div><div class="row-venue">${g.venue}</div>`
+          ? `<div class="row-time">${isParticipated ? '<span class="badge badge-mint">참여</span>' : '<span class="badge badge-pink">불참</span>'}</div><div class="row-venue">${g.venue}</div>`
           : `<div class="row-time">${formatTime(g.time)}</div><div class="row-venue">${g.venue}</div>`;
 
       html += `
         <div class="${rowClass}">
           <div class="row-left">
-            <div class="row-date">${formatDate(g.date)} ${isNext ? '<span class="badge badge-next">다음 경기</span>' : ''}</div>
+            <div class="row-date">${formatDate(g.date)} ${isNext ? '<span class="badge badge-pink">다음 경기</span>' : ''}</div>
             <div class="row-opponent">vs ${opponent} ${homeBadge}</div>
           </div>
           <div class="row-right">${rightContent}</div>

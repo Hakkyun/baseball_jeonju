@@ -101,9 +101,9 @@
 <body>
 
 <div class="header">
-  <p class="subtitle">변학균 No.41 · 전주 라이징스타</p>
+  <p class="subtitle" style="color:var(--text);font-weight:600;">변학균 No.41 · 전주 라이징스타</p>
   <div class="title-row">
-    <h1 class="title">학균 야구 허브</h1>
+    <h1 class="title" style="letter-spacing:0.1em;">THE CLUBHOUSE</h1>
     <div class="dots">
       <div class="dot dot-mint"></div>
       <div class="dot dot-pink"></div>
@@ -303,7 +303,7 @@ function renderSeason(games) {
   const iv = tO/3;
   const era = iv>0?(tER/iv*7):null;
   const eraFmt = era!==null?era.toFixed(2):'-';
-  const eraC = era!==null?(era<=5?'text-mint':era<=8?'text-yellow':'text-pink'):'';
+  const eraC = era!==null?(era<=6?'text-mint':era<=10?'text-yellow':'text-pink'):'';
   const innFmt = `${Math.floor(tO/3)}.${tO%3}`;
 
   document.getElementById('season-stats-p').innerHTML = `
